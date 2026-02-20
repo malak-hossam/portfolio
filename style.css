@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.projects {
+  padding: 60px;
+}
+
+.card {
+  background: #020617;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+}
