@@ -4,23 +4,25 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#070510" />
-  <title>Malak Hossam — AI Engineer</title>
+  <title>Malak Imbaby — AI Engineer</title>
 
   <style>
     :root{
       --bg0:#070510;
       --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.72);
+      --muted:rgba(255,255,255,.74);
       --muted2:rgba(255,255,255,.58);
-      --stroke:rgba(255,255,255,.14);
-      --glass:rgba(255,255,255,.08);
-      --glass2:rgba(255,255,255,.05);
 
       --accent:#b59bff;
       --accent2:#ffb3d6;
       --accent3:#7cf3ff;
 
+      --glass:rgba(255,255,255,.08);
+      --glass2:rgba(255,255,255,.05);
+      --stroke:rgba(255,255,255,.14);
+
       --shadow:0 18px 55px rgba(0,0,0,.55);
+
       --max:1120px;
       --r:18px;
       --r2:28px;
@@ -36,13 +38,13 @@
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
       background: var(--bg0);
       overflow-x:hidden;
+      cursor: none; /* we will render our own cursor + trail */
     }
     a{ color:inherit; text-decoration:none; }
     .container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
 
     /* =========================================
-       ✅ FULL BACKGROUND SYSTEM
-       - Video (hero only) + Color shapes (next sections)
+       ✅ BACKGROUND: video for first scene + cinematic overlay
        ========================================= */
     .bg-wrap{
       position:fixed;
@@ -52,7 +54,6 @@
       background:#05040c;
     }
 
-    /* Video layer */
     .bg-video{
       position:absolute;
       inset:0;
@@ -60,67 +61,49 @@
       height:100%;
       object-fit:cover;
       transform: scale(1.06);
-      /* Sharper + clearer than before */
-      filter: brightness(.68) contrast(1.05) saturate(1.06) blur(0px);
-      opacity: 0;
-      transition: opacity 520ms ease;
+      filter: brightness(.74) contrast(1.06) saturate(1.06);
+      opacity: 1;
+      transition: opacity 760ms cubic-bezier(.2,.9,.2,1);
       will-change: opacity;
     }
 
-    /* Color base */
-    .color-base{
+    /* cinematic overlays */
+    .cinematic{
       position:absolute;
       inset:0;
-      background: linear-gradient(180deg, #05040c, #070510 35%, #120a25);
-      opacity: 1;
-    }
-
-    /* Big “circle/spot” that grows between sections */
-    .spot{
-      position:absolute;
-      left:50%;
-      top:52%;
-      width: 900px;
-      height: 900px;
-      border-radius: 999px;
-      transform: translate(-50%,-50%);
-      opacity: .95;
-      will-change: transform, width, height, left, top, opacity, filter;
+      z-index:5;
       pointer-events:none;
-      mix-blend-mode: screen;
-    }
-
-    /* Secondary spot */
-    .spot2{
-      position:absolute;
-      left:50%;
-      top:52%;
-      width: 620px;
-      height: 620px;
-      border-radius: 999px;
-      transform: translate(-50%,-50%);
-      opacity: .70;
-      will-change: transform, width, height, left, top, opacity, filter;
-      pointer-events:none;
-      mix-blend-mode: screen;
-    }
-
-    /* Readability overlay */
-    .overlay{
-      position:absolute;
-      inset:0;
       background:
-        radial-gradient(900px 420px at 15% 20%, rgba(124,243,255,.10), transparent 60%),
-        radial-gradient(900px 420px at 85% 25%, rgba(181,155,255,.14), transparent 62%),
-        radial-gradient(900px 420px at 65% 80%, rgba(255,179,214,.09), transparent 62%),
-        linear-gradient(180deg, rgba(7,5,16,.20), rgba(7,5,16,.82));
-      pointer-events:none;
-      z-index: 5;
+        radial-gradient(1200px 720px at 18% 45%, rgba(5,4,12,.88), transparent 62%),
+        radial-gradient(1000px 650px at 70% 30%, rgba(5,4,12,.55), transparent 60%),
+        linear-gradient(180deg, rgba(5,4,12,.22), rgba(5,4,12,.82));
     }
 
-    /* Stars */
+    /* film grain */
+    .grain{
+      position:absolute;
+      inset:-30%;
+      z-index:6;
+      pointer-events:none;
+      opacity:.10;
+      mix-blend-mode: overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      transform: translateZ(0);
+      animation: grainMove 8s steps(10) infinite;
+    }
+    @keyframes grainMove{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-2%, 1%, 0); }
+      50%{ transform: translate3d(-1%, -2%, 0); }
+      75%{ transform: translate3d(2%, 2%, 0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    /* subtle stars */
     .stars{
       position:absolute; inset:0;
+      z-index:4;
+      pointer-events:none;
       background:
         radial-gradient(2px 2px at 12% 22%, rgba(255,255,255,.85), transparent 55%),
         radial-gradient(1.5px 1.5px at 26% 74%, rgba(255,255,255,.70), transparent 55%),
@@ -128,8 +111,7 @@
         radial-gradient(2px 2px at 82% 58%, rgba(255,255,255,.78), transparent 55%),
         radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.50), transparent 55%);
       opacity:.14;
-      pointer-events:none;
-      z-index: 6;
+      mix-blend-mode: screen;
     }
 
     /* =========================================
@@ -171,14 +153,30 @@
     main{ padding-top:var(--headerH); }
 
     /* =========================================
-       Sections (full “scenes”)
+       Sections + cinematic smooth entrance
        ========================================= */
     section{
       min-height: calc(100vh - var(--headerH));
       display:flex;
       align-items:center;
-      padding: 88px 0;
+      padding: 92px 0;
       position:relative;
+    }
+
+    /* smooth cinematic entrance per section */
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px) scale(.99);
+      filter: blur(6px);
+      transition: opacity 900ms cubic-bezier(.2,.9,.2,1),
+                  transform 900ms cubic-bezier(.2,.9,.2,1),
+                  filter 900ms cubic-bezier(.2,.9,.2,1);
+      will-change: opacity, transform, filter;
+    }
+    .reveal.in{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
     }
 
     .kicker{
@@ -190,8 +188,8 @@
     }
     h1{
       margin:0;
-      font-size:clamp(46px, 6vw, 86px);
-      line-height:.94;
+      font-size:clamp(50px, 6.2vw, 96px);
+      line-height:.92;
       letter-spacing:-.04em;
     }
     h2{
@@ -200,16 +198,17 @@
       letter-spacing:-.02em;
       line-height:1.12;
     }
-    .lead{
-      margin:12px 0 0;
-      color:var(--muted);
-      line-height:1.75;
-      font-size:15.5px;
-      max-width:74ch;
-    }
 
-    /* ✅ Hero: no card */
-    .hero-wrap{ max-width: 920px; }
+    /* About hero */
+    .hero-wrap{ max-width: 860px; }
+    .hero-text{
+      margin:14px 0 0;
+      color:var(--muted);
+      line-height:1.72;
+      font-size:16px;
+      /* ✅ keep it short in width so it becomes 2–3 lines */
+      max-width: 62ch;
+    }
 
     .actions{
       display:flex; gap:12px; flex-wrap:wrap;
@@ -228,28 +227,29 @@
       transition:160ms ease;
       white-space:nowrap;
     }
-
-    /* ✅ Stronger highlight on hover */
+    /* ✅ stronger hover highlight */
     .btn:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,.12);
-      border-color: rgba(181,155,255,.55);
+      border-color: rgba(181,155,255,.60);
       box-shadow:
         0 18px 55px rgba(0,0,0,.55),
-        0 0 0 1px rgba(181,155,255,.20),
-        0 0 28px rgba(181,155,255,.22);
+        0 0 0 1px rgba(181,155,255,.22),
+        0 0 34px rgba(181,155,255,.24);
     }
     .btn.primary{
-      background: linear-gradient(135deg, rgba(181,155,255,.26), rgba(124,243,255,.12));
-      border-color: rgba(181,155,255,.35);
+      background: linear-gradient(135deg, rgba(181,155,255,.30), rgba(124,243,255,.14));
+      border-color: rgba(181,155,255,.40);
     }
     .btn.primary:hover{
+      border-color: rgba(124,243,255,.55);
       box-shadow:
         0 18px 55px rgba(0,0,0,.55),
         0 0 0 1px rgba(124,243,255,.22),
-        0 0 34px rgba(124,243,255,.18);
+        0 0 38px rgba(124,243,255,.20);
     }
 
+    /* glass panels for other sections */
     .panel{
       border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.14);
@@ -260,8 +260,15 @@
       padding: 24px;
       max-width: 920px;
     }
+    .lead{
+      margin:12px 0 0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15.5px;
+      max-width:74ch;
+    }
 
-    /* Projects: hover pop */
+    /* Projects hover pop */
     .proj-grid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -315,7 +322,37 @@
       background: linear-gradient(180deg, transparent, rgba(0,0,0,.22));
     }
 
+    /* =========================================
+       ✅ Custom cursor + colored dot trail
+       ========================================= */
+    .cursor{
+      position:fixed;
+      left:0; top:0;
+      width:12px; height:12px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, var(--accent3), var(--accent));
+      box-shadow: 0 0 18px rgba(124,243,255,.25);
+      transform: translate(-50%,-50%);
+      z-index:1000;
+      pointer-events:none;
+      opacity:0;
+      transition: opacity 180ms ease;
+    }
+    .trail-dot{
+      position:fixed;
+      left:0; top:0;
+      width:7px; height:7px;
+      border-radius:999px;
+      transform: translate(-50%,-50%);
+      z-index:999;
+      pointer-events:none;
+      opacity:.0;
+      will-change: transform, opacity;
+    }
+
     @media (max-width: 980px){
+      body{ cursor:auto; }
+      .cursor,.trail-dot{ display:none; }
       section{ padding: 70px 0; }
       .proj-grid{ grid-template-columns: 1fr; }
       .proj-grid[data-active] .proj{ transform:none !important; opacity:1 !important; }
@@ -324,25 +361,25 @@
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .bg-video{ transition:none; }
+      .reveal{ transition:none; opacity:1; transform:none; filter:none; }
+      body{ cursor:auto; }
+      .cursor,.trail-dot{ display:none; }
+      .grain{ display:none; }
     }
   </style>
 </head>
 
 <body>
-  <!-- ✅ Background -->
+  <!-- Background -->
   <div class="bg-wrap" aria-hidden="true">
-    <div class="color-base"></div>
-
-    <!-- video (hero only) -->
     <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" src="assets/skyline.mp4"></video>
-
-    <!-- connected color shapes -->
-    <div id="spot" class="spot"></div>
-    <div id="spot2" class="spot2"></div>
-
-    <div class="overlay"></div>
     <div class="stars"></div>
+    <div class="cinematic"></div>
+    <div class="grain"></div>
   </div>
+
+  <!-- Custom cursor -->
+  <div id="cursor" class="cursor"></div>
 
   <header>
     <div class="container">
@@ -360,18 +397,16 @@
   </header>
 
   <main id="top">
-    <!-- ✅ FIRST PAGE = ABOUT (as you requested) -->
-    <section id="about" data-scene="0" data-video="on">
+    <!-- FIRST PAGE = ABOUT -->
+    <section id="about">
       <div class="container">
-        <div class="hero-wrap">
-          <p class="kicker">AI Engineer • LLMs • RAG • MLOps • AI & Automation</p>
-          <h1>About Malak</h1>
-          <p class="lead">
-            I’m an AI Engineer who genuinely enjoys the part most people skip — understanding why something works before building with it.
-            My work spans LLM-powered applications, RAG pipelines, visual grounding, and MLOps, but the thread connecting all of it is the same:
-            I care about fundamentals as much as I care about shipping. I think clearly under pressure, move deliberately, and tend to ask one layer
-            deeper than necessary — which has saved more production systems than I’d like to admit. I’m not chasing the next framework.
-            I’m focused on building AI that’s actually reliable when it matters.
+        <div class="hero-wrap reveal">
+          <p class="kicker">About</p>
+          <h1>Malak Imbaby</h1>
+          <p class="hero-text">
+            I’m an AI Engineer who genuinely enjoys understanding why something works before building with it.
+            My work spans LLM-powered applications, RAG pipelines, visual grounding, and MLOps —
+            focused on building AI that’s actually reliable when it matters.
           </p>
 
           <div class="actions">
@@ -384,9 +419,9 @@
       </div>
     </section>
 
-    <section id="experience" data-scene="1">
+    <section id="experience">
       <div class="container">
-        <div class="panel">
+        <div class="panel reveal">
           <p class="kicker">Experience</p>
           <h2>Internships & applied AI work</h2>
           <p class="lead">
@@ -397,12 +432,12 @@
       </div>
     </section>
 
-    <section id="projects" data-scene="2">
+    <section id="projects">
       <div class="container">
-        <div class="panel">
+        <div class="panel reveal">
           <p class="kicker">Projects</p>
           <h2>Hover to highlight</h2>
-          <p class="lead">اللي تقفي عليه يبقى بارز… والباقي يهدى.</p>
+          <p class="lead">Hover on a card to bring it forward.</p>
 
           <div class="proj-grid" id="projGrid" data-active="0">
             <div class="proj" tabindex="0">
@@ -421,14 +456,13 @@
               <div class="tags"><span class="tag">CV</span><span class="tag">ResNet</span></div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <section id="skills" data-scene="3">
+    <section id="skills">
       <div class="container">
-        <div class="panel">
+        <div class="panel reveal">
           <p class="kicker">Skills</p>
           <h2>Tools I use to ship</h2>
           <p class="lead">PyTorch • TensorFlow • FastAPI • Docker • Git • LangChain • OpenCV</p>
@@ -436,9 +470,9 @@
       </div>
     </section>
 
-    <section id="contact" data-scene="4">
+    <section id="contact">
       <div class="container">
-        <div class="panel">
+        <div class="panel reveal">
           <p class="kicker">Contact</p>
           <h2>Let’s build something</h2>
           <p class="lead"><a href="mailto:malak.hossam.work@gmail.com">malak.hossam.work@gmail.com</a> • 01204073624</p>
@@ -453,7 +487,7 @@
     <footer>
       <div class="container">
         <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;direction:ltr;">
-          <div>© <span id="year"></span> Malak Hossam</div>
+          <div>© <span id="year"></span> Malak Imbaby</div>
           <a class="tag" href="#top">Back to top ↑</a>
         </div>
       </div>
@@ -461,10 +495,12 @@
   </main>
 
   <script>
+    // year
     document.getElementById("year").textContent = new Date().getFullYear();
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Active nav
+    // Active nav highlight
     const navLinks = Array.from(document.querySelectorAll(".links a"));
     const watchSections = navLinks
       .map(a => a.getAttribute("href"))
@@ -479,8 +515,16 @@
         navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === id));
       });
     }, { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 });
-
     watchSections.forEach(s => navObs.observe(s));
+
+    // Cinematic reveal on scroll
+    const reveals = Array.from(document.querySelectorAll(".reveal"));
+    const revObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add("in");
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -15% 0px" });
+    reveals.forEach(el => revObs.observe(el));
 
     // Projects hover/focus pop
     const grid = document.getElementById("projGrid");
@@ -493,119 +537,71 @@
       grid.dataset.active = "0";
     }
 
-    // ===== Connected shapes + mouse parallax + video only for first scene
-    const spot  = document.getElementById("spot");
-    const spot2 = document.getElementById("spot2");
-    const bgVideo = document.getElementById("bgVideo");
-    const sections = Array.from(document.querySelectorAll("main section[data-scene]"));
+    // Custom cursor + colored dot trail
+    const cursor = document.getElementById("cursor");
+    const trailCount = 18;
+    const dots = [];
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let showCursor = false;
 
-    // Mouse
-    let mx = 0, my = 0;
-    window.addEventListener("mousemove", (e) => {
-      const w = window.innerWidth || 1;
-      const h = window.innerHeight || 1;
-      mx = (e.clientX / w - 0.5);
-      my = (e.clientY / h - 0.5);
-    }, { passive:true });
+    function colorAt(i){
+      // cycle between accent colors
+      const t = i / (trailCount - 1);
+      // simple mix by choosing stops
+      if (t < 0.33) return "rgba(124,243,255,.85)";      // cyan
+      if (t < 0.66) return "rgba(181,155,255,.85)";      // purple
+      return "rgba(255,179,214,.85)";                    // pink
+    }
 
-    // scenes
-    const scenes = [
-      // 0 (About - first page) video ON
-      { x: 58, y: 45, size: 860,  size2: 540,
-        c1:"rgba(181,155,255,.18)", c2:"rgba(124,243,255,.12)", c3:"rgba(255,179,214,.10)", video:true },
+    if (!reduceMotion){
+      for (let i=0; i<trailCount; i++){
+        const d = document.createElement("div");
+        d.className = "trail-dot";
+        d.style.background = colorAt(i);
+        d.style.width = (7 - i*0.18) + "px";
+        d.style.height = (7 - i*0.18) + "px";
+        d.style.opacity = String(0.0);
+        document.body.appendChild(d);
+        dots.push({ el:d, x:mouseX, y:mouseY });
+      }
 
-      // 1 experience
-      { x: 50, y: 52, size: 1100,  size2: 680,
-        c1:"rgba(181,155,255,.28)", c2:"rgba(181,155,255,.10)", c3:"rgba(124,243,255,.12)", video:false },
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!showCursor){
+          showCursor = true;
+          cursor.style.opacity = "1";
+          dots.forEach(o => o.el.style.opacity = "0.85");
+        }
+      }, { passive:true });
 
-      // 2 projects
-      { x: 58, y: 55, size: 1400, size2: 820,
-        c1:"rgba(124,243,255,.16)", c2:"rgba(181,155,255,.16)", c3:"rgba(255,179,214,.10)", video:false },
-
-      // 3 skills
-      { x: 48, y: 58, size: 1500, size2: 880,
-        c1:"rgba(181,155,255,.22)", c2:"rgba(255,179,214,.14)", c3:"rgba(124,243,255,.12)", video:false },
-
-      // 4 contact
-      { x: 55, y: 45, size: 1200, size2: 720,
-        c1:"rgba(124,243,255,.14)", c2:"rgba(181,155,255,.18)", c3:"rgba(255,179,214,.12)", video:false },
-    ];
-
-    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-    function lerp(a,b,t){ return a + (b-a)*t; }
-
-    function pickScene(){
-      const vh = window.innerHeight || 1;
-      const center = vh * 0.55;
-
-      let bestIdx = 0, bestDist = Infinity;
-      sections.forEach((sec) => {
-        const i = parseInt(sec.dataset.scene, 10);
-        const r = sec.getBoundingClientRect();
-        const mid = r.top + r.height * 0.5;
-        const d = Math.abs(mid - center);
-        if (d < bestDist){ bestDist = d; bestIdx = i; }
+      window.addEventListener("mouseleave", () => {
+        cursor.style.opacity = "0";
+        dots.forEach(o => o.el.style.opacity = "0");
+        showCursor = false;
       });
 
-      const curSec = sections.find(s => parseInt(s.dataset.scene,10) === bestIdx) || sections[0];
-      const r = curSec.getBoundingClientRect();
-      const start = r.height * 0.65;
-      const inside = clamp(-r.top, 0, r.height);
-      const t = clamp((inside - start) / Math.max(1, (r.height - start)), 0, 1);
+      function animateTrail(){
+        // cursor follows mouse
+        cursor.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
 
-      return { i: bestIdx, t };
+        // dots chase previous dot
+        let x = mouseX, y = mouseY;
+        for (let i=0; i<dots.length; i++){
+          const o = dots[i];
+          // smoothing
+          o.x += (x - o.x) * 0.22;
+          o.y += (y - o.y) * 0.22;
+          o.el.style.transform = `translate(${o.x}px, ${o.y}px) translate(-50%, -50%)`;
+          // next target is this dot's position
+          x = o.x;
+          y = o.y;
+        }
+        requestAnimationFrame(animateTrail);
+      }
+      requestAnimationFrame(animateTrail);
     }
-
-    function paintSpot(el, s, mouseScale){
-      el.style.background = `
-        radial-gradient(55% 55% at 35% 35%, ${s.c1}, transparent 62%),
-        radial-gradient(55% 55% at 70% 45%, ${s.c2}, transparent 64%),
-        radial-gradient(55% 55% at 45% 75%, ${s.c3}, transparent 66%)
-      `;
-      const px = s.x + mx * mouseScale;
-      const py = s.y + my * mouseScale;
-      el.style.left = px + "%";
-      el.style.top  = py + "%";
-    }
-
-    function update(){
-      if (reduceMotion) return;
-
-      const { i, t } = pickScene();
-      const s1 = scenes[i] || scenes[0];
-      const s2 = scenes[Math.min(i+1, scenes.length-1)] || s1;
-
-      const s = {
-        x: lerp(s1.x, s2.x, t),
-        y: lerp(s1.y, s2.y, t),
-        size: lerp(s1.size, s2.size, t),
-        size2: lerp(s1.size2, s2.size2, t),
-        c1: t < 0.5 ? s1.c1 : s2.c1,
-        c2: t < 0.5 ? s1.c2 : s2.c2,
-        c3: t < 0.5 ? s1.c3 : s2.c3,
-        video: (t < 0.65 ? s1.video : s2.video),
-      };
-
-      spot.style.width  = s.size + "px";
-      spot.style.height = s.size + "px";
-      spot2.style.width  = s.size2 + "px";
-      spot2.style.height = s.size2 + "px";
-
-      paintSpot(spot,  s, 10);
-      paintSpot(spot2, s, 16);
-
-      bgVideo.style.opacity = s.video ? "1" : "0";
-    }
-
-    function raf(){
-      if (!reduceMotion) update();
-      requestAnimationFrame(raf);
-    }
-    raf();
-    update();
-
-    window.addEventListener("scroll", () => requestAnimationFrame(update), { passive:true });
-    window.addEventListener("resize", () => requestAnimationFrame(update));
   </script>
 </body>
 </html>
