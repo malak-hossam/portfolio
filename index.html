@@ -5,287 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malak Hossam | Applied AI Systems Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --graphite-base: #070709;
-            --scene-1: #0a0a0c;
-            --scene-2: #0d1117;
-            --scene-3: #110e15;
-            --scene-4: #0a0c10;
+            --bg-base: #050507;
             --metallic-light: #e0e5ec;
             --metallic-dark: #8b92a5;
-            --accent: #60a5fa;
-            --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --accent-blue: #60a5fa;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: var(--graphite-base); 
+            background-color: var(--bg-base); 
             color: var(--metallic-light); 
             overflow-x: hidden;
             margin: 0;
-            /* CRITICAL FIX: Native cursor restored for usability */
-            cursor: auto; 
+            cursor: auto; /* CRITICAL: Native cursor restored */
+            scroll-behavior: smooth;
         }
 
-        /* --- Interactive Background System --- */
-        #systemCanvas { 
+        /* --- Global Interactive Background --- */
+        #globalCanvas { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100vw; 
             height: 100vh; 
-            z-index: -2; /* Pushed deep back */
-            pointer-events: none; /* Never block interactions */
+            z-index: -2; 
+            pointer-events: none; 
         }
 
-        /* CRITICAL FIX: Ghost cursor is now a soft ambient light BEHIND content */
-        #ghostCursor {
+        /* Ambient Spotlight (Follows cursor, sits behind content) */
+        #ambientGhost {
             position: fixed;
             top: 0;
             left: 0;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(96, 165, 250, 0.03) 0%, rgba(255,255,255,0) 60%);
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.04) 0%, rgba(255,255,255,0) 60%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: -1;
-            filter: blur(40px);
             will-change: transform;
-            transition: opacity 0.3s ease;
         }
 
-        /* --- Scene & Layout Architecture --- */
-        .scene {
-            position: relative;
-            padding: 8rem 0;
-            z-index: 10;
-        }
-
-        /* Scene Backgrounds for visual separation */
-        .bg-scene-hero { background: linear-gradient(to bottom, var(--scene-1), var(--scene-2)); }
-        .bg-scene-solutions { background: linear-gradient(to bottom, var(--scene-2), var(--scene-3)); }
-        .bg-scene-tech { background: linear-gradient(to bottom, var(--scene-3), var(--scene-4)); }
-        .bg-scene-projects { background: linear-gradient(to bottom, var(--scene-4), var(--scene-1)); }
-
-        /* Animated Scene Divider */
-        .scene-divider {
-            height: 1px;
-            width: 0%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            margin: 0 auto;
-            transition: width 1.5s var(--ease-fluid);
-        }
-        .scene-divider.revealed { width: 100%; }
-
-        /* --- UI Elements --- */
+        /* --- Cinematic Typography --- */
+        .text-hero { font-size: clamp(3rem, 8vw, 7rem); line-height: 1.1; letter-spacing: -0.04em; }
+        .text-section { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; letter-spacing: -0.03em; }
+        
         .text-metallic {
             background: linear-gradient(135deg, #ffffff 0%, var(--metallic-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Motion Language: Reveal Elements */
-        .reveal-target {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s var(--ease-fluid), transform 0.8s var(--ease-fluid);
-        }
-        .reveal-target.revealed {
-            opacity: 1;
-            transform: translateY(0);
+        /* --- Scene Separators --- */
+        .scene-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            margin: 0;
         }
 
-        /* Rich Soft Cards */
-        .ticket {
-            background: linear-gradient(180deg, rgba(30, 30, 35, 0.4) 0%, rgba(20, 20, 22, 0.2) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+        /* --- Ticket System (Experience & Projects) --- */
+        .ticket-card {
+            background: rgba(15, 15, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
             backdrop-filter: blur(12px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.4s ease, transform 0.4s var(--ease-fluid), box-shadow 0.4s ease;
+            transition: all 0.5s var(--ease-out-expo);
             position: relative;
             overflow: hidden;
         }
 
-        .ticket:hover {
-            border-color: rgba(96, 165, 250, 0.3);
+        .ticket-card:hover {
+            border-color: rgba(96, 165, 250, 0.2);
+            background: rgba(20, 20, 25, 0.8);
             transform: translateY(-4px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255,255,255,0.02);
         }
 
-        /* Micro-interaction Line */
-        .ticket-accent {
+        .ticket-glow {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 0%;
-            background: var(--metallic-dark);
-            transition: height 0.6s var(--ease-fluid), background 0.3s ease;
+            top: 0; right: 0;
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
-        .ticket:hover .ticket-accent { height: 100%; background: var(--accent); }
+        .ticket-card:hover .ticket-glow { opacity: 1; }
 
+        /* Abstract Project Thumbnail */
+        .project-thumb {
+            background: linear-gradient(120deg, #111827 0%, #1f2937 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .project-thumb::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+            transform: rotate(30deg);
+            animation: shimmer 6s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(30deg) translateY(-100%); }
+            100% { transform: rotate(30deg) translateY(100%); }
+        }
+
+        /* --- Motion Reveal --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hide scrollbar for clean mobile nav */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
 
-    <canvas id="systemCanvas"></canvas>
-    <div id="ghostCursor"></div>
+    <canvas id="globalCanvas"></canvas>
+    <div id="ambientGhost"></div>
 
-    <nav class="fixed top-0 w-full z-50 px-8 py-5 flex justify-between items-center bg-black/40 backdrop-blur-xl border-b border-white/5 reveal-target revealed">
-        <span class="font-medium tracking-tight text-white">MH.</span>
-        <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest text-gray-500 font-medium">
-            <a href="#solutions" class="hover:text-white transition-colors">Solutions</a>
-            <a href="#tech-stack" class="hover:text-white transition-colors">Systems</a>
-            <a href="#projects" class="hover:text-white transition-colors">Projects</a>
-            <a href="#resume" class="text-blue-400 hover:text-blue-300 transition-colors">Resume</a>
+    <nav class="fixed top-0 w-full z-50 px-6 py-4 bg-black/50 backdrop-blur-xl border-b border-white/5 reveal active">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+            <span class="font-bold tracking-tighter text-white text-xl">MALAK.H</span>
+            <div class="flex gap-6 overflow-x-auto no-scrollbar w-full md:w-auto text-xs uppercase tracking-widest text-gray-400 font-medium">
+                <a href="#home" class="hover:text-white transition-colors whitespace-nowrap">Home</a>
+                <a href="#experience" class="hover:text-white transition-colors whitespace-nowrap">Experience</a>
+                <a href="#projects" class="hover:text-white transition-colors whitespace-nowrap">Projects</a>
+                <a href="#resume" class="hover:text-white transition-colors whitespace-nowrap">Resume</a>
+                <a href="#contact" class="text-blue-400 hover:text-blue-300 transition-colors whitespace-nowrap">Contact</a>
+            </div>
         </div>
     </nav>
 
-    <main class="scene bg-scene-hero min-h-screen flex flex-col justify-center px-6 md:px-24 pt-20">
-        <div class="max-w-7xl mx-auto w-full reveal-target">
-            <p class="text-sm tracking-widest uppercase text-accent mb-6 font-medium">Applied AI Systems Engineer</p>
-            <h1 class="text-6xl md:text-8xl font-medium tracking-tight text-metallic mb-8 max-w-4xl">Malak Hossam</h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed mb-12">
-                Architecting intelligent systems. Specializing in low-latency multimodal interactions, persistent memory layers, and deep learning architectures.
+    <section id="home" class="min-h-screen flex flex-col justify-center px-6 md:px-24 pt-24 pb-12 relative z-10">
+        <div class="max-w-7xl mx-auto w-full">
+            <p class="text-sm md:text-base tracking-widest uppercase text-accent-blue mb-6 font-semibold reveal delay-100">AI Engineer</p>
+            <h1 class="text-hero font-bold text-metallic mb-6 reveal delay-200">Malak Hossam</h1>
+            <p class="text-lg md:text-2xl text-gray-400 max-w-3xl leading-relaxed mb-12 reveal delay-300">
+                Applied AI Systems Engineer. Architecting low-latency multimodal interactions, persistent memory layers, and production-ready deep learning systems.
             </p>
-            <div class="flex space-x-6 text-sm font-medium tracking-wide">
-                <a href="https://github.com/malak-hossam" target="_blank" class="px-8 py-3 bg-white text-black rounded-lg hover:bg-gray-200 transition-all hover:scale-105 active:scale-95 shadow-lg">GitHub</a>
-                <a href="https://linkedin.com/in/malak-hossam" target="_blank" class="px-8 py-3 border border-white/20 rounded-lg hover:bg-white/5 transition-all hover:border-white/40">LinkedIn</a>
+            <div class="flex flex-wrap gap-4 text-sm font-medium tracking-wide reveal delay-400">
+                <a href="https://github.com/malak-hossam" target="_blank" class="px-8 py-4 bg-white text-black rounded-lg hover:bg-gray-200 transition-all shadow-lg hover:shadow-white/20">GitHub</a>
+                <a href="https://linkedin.com/in/malak-hossam" target="_blank" class="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-lg hover:bg-white/10 hover:border-white/30 transition-all">LinkedIn</a>
+                <a href="#resume" class="px-8 py-4 border border-transparent text-gray-400 hover:text-white transition-colors flex items-center gap-2">View Resume ↓</a>
             </div>
         </div>
-    </main>
+    </section>
 
-    <div class="scene-divider reveal-target"></div>
+    <div class="scene-divider"></div>
 
-    <section id="solutions" class="scene bg-scene-solutions px-6 md:px-24">
+    <section id="experience" class="py-32 px-6 md:px-24 relative z-10">
         <div class="max-w-7xl mx-auto w-full">
-            <h2 class="text-xs tracking-widest uppercase text-gray-500 mb-16 reveal-target">How I Solve Your AI Challenges</h2>
+            <p class="text-xs tracking-widest uppercase text-gray-500 mb-4 reveal">Experience</p>
+            <h2 class="text-section font-bold text-white mb-16 reveal">Systems I Ship</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="ticket-card p-8 md:p-10 reveal">
+                    <div class="ticket-glow"></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-2xl font-semibold text-white">AI Backend & Interaction</h3>
+                        <span class="text-xs font-mono text-gray-500 bg-black/40 px-3 py-1 rounded-full">Prime Softworks</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        Developed a GPT Realtime-powered AI Voice Assistant. Engineered full RAG pipelines using Supabase to enable persistent long-term memory and contextual coaching sessions.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-gray-300">
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">FastAPI</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">LLM Agents</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">RAG</span>
+                    </div>
+                </div>
+
+                <div class="ticket-card p-8 md:p-10 reveal" style="transition-delay: 100ms;">
+                    <div class="ticket-glow"></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-2xl font-semibold text-white">Deep Learning & CV</h3>
+                        <span class="text-xs font-mono text-gray-500 bg-black/40 px-3 py-1 rounded-full">Instant Academy</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        Trained CNN/ResNet architectures for precise image classification. Built robust "Chat-with-PDF" pipelines and improved text sentiment model accuracy by 12% via rigorous data cleaning.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-gray-300">
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">PyTorch</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">Computer Vision</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">NLP</span>
+                    </div>
+                </div>
+
+                <div class="ticket-card p-8 md:p-10 reveal">
+                    <div class="ticket-glow"></div>
+                    <div class="flex justify-between items-start mb-6">
+                        <h3 class="text-2xl font-semibold text-white">MLOps & Deployment</h3>
+                        <span class="text-xs font-mono text-gray-500 bg-black/40 px-3 py-1 rounded-full">Orange Digital</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-8">
+                        Delivered end-to-end Machine Learning deployments. Containerized complex model architectures to establish reproducible training pipelines and CI/CD workflows.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-gray-300">
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">Docker</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">CI/CD</span>
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-md">Architecture</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="scene-divider"></div>
+
+    <section id="projects" class="py-32 px-6 md:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto w-full">
+            <p class="text-xs tracking-widest uppercase text-gray-500 mb-4 reveal">Projects</p>
+            <h2 class="text-section font-bold text-white mb-16 reveal">Engineered Systems</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <div class="ticket p-8 md:p-10 reveal-target">
-                    <div class="ticket-accent"></div>
-                    <h3 class="text-xl font-medium text-white mb-3">LLMs & Generative AI</h3>
-                    <p class="text-gray-400 leading-relaxed text-sm">Developing voice-to-voice and text-to-text interaction engines using real-time APIs. Building intelligent agents capable of complex reasoning.</p>
-                </div>
-
-                <div class="ticket p-8 md:p-10 reveal-target" style="transition-delay: 100ms;">
-                    <div class="ticket-accent"></div>
-                    <h3 class="text-xl font-medium text-white mb-3">RAG & Knowledge Systems</h3>
-                    <p class="text-gray-400 leading-relaxed text-sm">Implementing contextual pipelines integrating vector search, custom embeddings, and persistent long-term memory for intelligent data retrieval.</p>
-                </div>
-
-                <div class="ticket p-8 md:p-10 reveal-target">
-                    <div class="ticket-accent"></div>
-                    <h3 class="text-xl font-medium text-white mb-3">AI & ML Engineering</h3>
-                    <p class="text-gray-400 leading-relaxed text-sm">Training and fine-tuning CNNs/ResNets for precise computer vision tasks, alongside optimizing Arabic sentiment classification models.</p>
-                </div>
-
-                <div class="ticket p-8 md:p-10 reveal-target" style="transition-delay: 100ms;">
-                    <div class="ticket-accent"></div>
-                    <h3 class="text-xl font-medium text-white mb-3">Intelligent Automation</h3>
-                    <p class="text-gray-400 leading-relaxed text-sm">Engineering end-to-end desktop automation pipelines that fetch data, identify visual targets, and format outputs seamlessly.</p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="scene-divider reveal-target"></div>
-
-    <section id="tech-stack" class="scene bg-scene-tech px-6 md:px-24">
-        <div class="max-w-7xl mx-auto w-full">
-            <h2 class="text-xs tracking-widest uppercase text-gray-500 mb-16 reveal-target">System Capabilities</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                
-                <div class="reveal-target border-l border-white/10 pl-6 hover:border-blue-400/50 transition-colors duration-500">
-                    <h4 class="text-white font-medium mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Core AI Systems</h4>
-                    <ul class="space-y-3 text-sm text-gray-400">
-                        <li>Python • C++ • Java</li>
-                        <li>PyTorch • TensorFlow</li>
-                        <li>CNN • RNN/LSTM • GANs</li>
-                    </ul>
-                </div>
-
-                <div class="reveal-target border-l border-white/10 pl-6 hover:border-blue-400/50 transition-colors duration-500" style="transition-delay: 100ms;">
-                    <h4 class="text-white font-medium mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span> LLMs & RAG</h4>
-                    <ul class="space-y-3 text-sm text-gray-400">
-                        <li>LangChain • CrewAI</li>
-                        <li>Transformers (BERT, GPT)</li>
-                        <li>Vector Embeddings</li>
-                    </ul>
-                </div>
-
-                <div class="reveal-target border-l border-white/10 pl-6 hover:border-blue-400/50 transition-colors duration-500" style="transition-delay: 200ms;">
-                    <h4 class="text-white font-medium mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> DevOps & Backend</h4>
-                    <ul class="space-y-3 text-sm text-gray-400">
-                        <li>FastAPI • REST APIs</li>
-                        <li>Docker • CI/CD Pipelines</li>
-                        <li>Git Version Control</li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="scene-divider reveal-target"></div>
-
-    <section id="projects" class="scene bg-scene-projects px-6 md:px-24">
-        <div class="max-w-7xl mx-auto w-full">
-            <h2 class="text-xs tracking-widest uppercase text-gray-500 mb-16 reveal-target">Engineered Systems</h2>
-            <div class="space-y-6">
-                
-                <div class="ticket p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center reveal-target">
-                    <div class="ticket-accent"></div>
-                    <div class="max-w-3xl pr-8">
-                        <span class="text-xs font-semibold text-accent uppercase tracking-wider mb-3 block">Arabic NLP Specialization</span>
-                        <h3 class="text-2xl font-medium text-white mb-3">AraBART Morphology Model</h3>
-                        <p class="text-gray-400 leading-relaxed text-sm">Fine-tuned on MASAQ with CAMEL Tools to extract root, POS, and case features, reaching 82% accuracy in morphological analysis.</p>
+                <div class="ticket-card flex flex-col reveal">
+                    <div class="project-thumb h-48 w-full flex items-center justify-center border-b border-white/5">
+                        <span class="text-gray-600 font-mono text-sm tracking-widest uppercase">NLP Architecture</span>
                     </div>
-                    <a href="https://github.com/malak-hossam" target="_blank" class="mt-6 md:mt-0 px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-white transition-all flex items-center gap-2 whitespace-nowrap">
-                        View Code ↗
-                    </a>
+                    <div class="p-8 flex-1 flex flex-col">
+                        <h3 class="text-2xl font-semibold text-white mb-4">AraBART Morphology Model</h3>
+                        <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-1">
+                            <li><strong class="text-gray-200">Problem:</strong> Complex feature extraction in low-resource Arabic text.</li>
+                            <li><strong class="text-gray-200">Solution:</strong> Fine-tuned AraBART on MASAQ integrating CAMEL Tools.</li>
+                            <li><strong class="text-gray-200">Result:</strong> Reached 82% accuracy in predicting root, POS, and case.</li>
+                        </ul>
+                        <div class="flex gap-4 border-t border-white/10 pt-6">
+                            <a href="https://github.com/malak-hossam" target="_blank" class="text-sm font-medium text-white hover:text-blue-400 transition-colors">View Code ↗</a>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="ticket p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center reveal-target">
-                    <div class="ticket-accent"></div>
-                    <div class="max-w-3xl pr-8">
-                        <span class="text-xs font-semibold text-accent uppercase tracking-wider mb-3 block">Computer Vision</span>
-                        <h3 class="text-2xl font-medium text-white mb-3">Butterfly Image Classification</h3>
-                        <p class="text-gray-400 leading-relaxed text-sm">Engineered a custom CNN and fine-tuned ResNet architecture using PyTorch and OpenCV, achieving a 94% classification accuracy.</p>
+                <div class="ticket-card flex flex-col reveal" style="transition-delay: 100ms;">
+                    <div class="project-thumb h-48 w-full flex items-center justify-center border-b border-white/5">
+                        <span class="text-gray-600 font-mono text-sm tracking-widest uppercase">Computer Vision</span>
                     </div>
-                    <a href="https://kaggle.com/malakhossam1" target="_blank" class="mt-6 md:mt-0 px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-white transition-all flex items-center gap-2 whitespace-nowrap">
-                        View Code ↗
-                    </a>
+                    <div class="p-8 flex-1 flex flex-col">
+                        <h3 class="text-2xl font-semibold text-white mb-4">Butterfly Classification</h3>
+                        <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-1">
+                            <li><strong class="text-gray-200">Problem:</strong> High-variance image categorization.</li>
+                            <li><strong class="text-gray-200">Solution:</strong> Engineered a custom CNN and fine-tuned a ResNet architecture via PyTorch.</li>
+                            <li><strong class="text-gray-200">Result:</strong> Achieved a 94% evaluation accuracy.</li>
+                        </ul>
+                        <div class="flex gap-4 border-t border-white/10 pt-6">
+                            <a href="https://kaggle.com/malakhossam1" target="_blank" class="text-sm font-medium text-white hover:text-blue-400 transition-colors">View Live ↗</a>
+                            <a href="https://github.com/malak-hossam" target="_blank" class="text-sm font-medium text-white hover:text-blue-400 transition-colors">View Code ↗</a>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
 
-    <div class="scene-divider reveal-target"></div>
+    <div class="scene-divider"></div>
 
-    <section id="resume" class="scene px-6 md:px-24 pb-32">
-        <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row justify-between items-start gap-16 reveal-target">
+    <section id="resume" class="py-32 px-6 md:px-24 relative z-10">
+        <div class="max-w-7xl mx-auto w-full flex flex-col md:flex-row gap-12">
             
-            <div class="md:w-1/2 ticket p-10">
-                <div class="ticket-accent"></div>
-                <h2 class="text-3xl font-medium text-white mb-4">Documentation</h2>
-                <p class="text-gray-400 mb-8 leading-relaxed text-sm">Review my full academic background (BSc Computer Science, 3.87 GPA) and detailed technical history.</p>
-                <a href="#" class="inline-flex items-center px-6 py-3 border border-white/20 rounded-lg text-sm font-medium hover:bg-white hover:text-black transition-all">
+            <div class="flex-1 ticket-card p-10 reveal">
+                <p class="text-xs tracking-widest uppercase text-gray-500 mb-4">Resume</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Documentation</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">
+                    Review my full academic background (BSc Computer Science, 3.87 GPA) and comprehensive technical history.
+                </p>
+                <a href="#" class="inline-flex items-center px-8 py-4 bg-white/5 border border-white/10 rounded-lg text-sm font-medium text-white hover:bg-white hover:text-black transition-all">
                     Download Resume PDF ↓
                 </a>
             </div>
-            
-            <div class="md:w-1/2 ticket p-10" id="contact">
-                <div class="ticket-accent bg-blue-500"></div>
-                <h2 class="text-3xl font-medium text-white mb-4">Initialize Contact</h2>
-                <p class="text-gray-400 mb-8 leading-relaxed text-sm">Available for discussions regarding AI architecture, MLOps, and backend engineering opportunities.</p>
-                <a href="mailto:malak.hossam.work@gmail.com" class="inline-flex items-center px-6 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-200 transition-all">
+
+            <div id="contact" class="flex-1 ticket-card p-10 reveal" style="transition-delay: 100ms;">
+                <p class="text-xs tracking-widest uppercase text-gray-500 mb-4">Contact</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Initialize Contact</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">
+                    Available for discussions regarding AI systems architecture, intelligent backend engineering, and MLOps opportunities.
+                </p>
+                <a href="mailto:malak.hossam.work@gmail.com" class="inline-flex items-center px-8 py-4 bg-accent-blue text-black border border-transparent rounded-lg text-sm font-bold hover:bg-white transition-all shadow-lg hover:shadow-white/20">
                     malak.hossam.work@gmail.com ↗
                 </a>
             </div>
@@ -293,148 +303,134 @@
         </div>
     </section>
 
+    <footer class="py-10 text-center border-t border-white/5 relative z-10">
+        <p class="text-xs text-gray-600 font-mono tracking-widest uppercase">© 2026 Malak Hossam. AI Systems Engineer.</p>
+    </footer>
+
     <script>
-        // --- 1. Non-Blocking Ambient Interaction System ---
-        const canvas = document.getElementById('systemCanvas');
+        // --- 1. Global Background System & Touch Parallax ---
+        const canvas = document.getElementById('globalCanvas');
         const ctx = canvas.getContext('2d');
-        const ghost = document.getElementById('ghostCursor');
+        const ghost = document.getElementById('ambientGhost');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
         let mouse = { x: -1000, y: -1000, active: false };
         let ghostPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-        let ripples = []; // Mobile touch ripples
+        let ripples = []; // Mobile touch array
 
-        const spacing = 40; 
-        const dotRadius = 1;
-        const repelRadius = 150;
-        const maxDisplacement = 20;
+        const spacing = 45; 
+        const dotRadius = 1.2;
+        const repelRadius = 140;
+        const maxDisplacement = 25;
         let points = [];
 
-        // Desktop interaction
+        // Input Handling
+        const updatePointer = (x, y) => { mouse.x = x; mouse.y = y; mouse.active = true; };
+        
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            mouse.active = true;
-            ghost.style.opacity = '1';
-        });
+            updatePointer(e.clientX, e.clientY);
+        }, { passive: true });
 
-        // Mobile/Touch Interaction (Fix)
+        // Mobile Touch Systems (Ripples + Drag)
         window.addEventListener('touchstart', (e) => {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-            mouse.active = true;
-            ghost.style.opacity = '0'; // Hide ghost on mobile, rely on ripples
-            
-            // Generate touch ripple
-            ripples.push({ x: mouse.x, y: mouse.y, radius: 0, alpha: 0.8 });
-        }, { passive: true }); // passive true ensures we don't block scrolling
+            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+            ripples.push({ x: mouse.x, y: mouse.y, radius: 0, alpha: 0.6 });
+        }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-            if(Math.random() > 0.8) { // Occasional trailing ripples on drag
-                 ripples.push({ x: mouse.x, y: mouse.y, radius: 0, alpha: 0.3 });
+            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+            // Trail effect on drag
+            if(Math.random() > 0.7) {
+                 ripples.push({ x: mouse.x, y: mouse.y, radius: 0, alpha: 0.2 });
             }
         }, { passive: true });
 
-        window.addEventListener('touchend', () => {
-            mouse.active = false;
-        });
+        window.addEventListener('touchend', () => { mouse.active = false; });
+        window.addEventListener('scroll', () => { /* Keeps canvas static while content scrolls smoothly over it */ }, { passive: true });
 
-        function buildSystem() {
+        function buildGrid() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             points = [];
-            
-            for (let x = 0; x < canvas.width + spacing; x += spacing) {
-                for (let y = 0; y < canvas.height + spacing; y += spacing) {
-                    points.push({ originX: x, originY: y, currentX: x, currentY: y, targetX: x, targetY: y });
+            for (let x = 0; x <= canvas.width + spacing; x += spacing) {
+                for (let y = 0; y <= canvas.height + spacing; y += spacing) {
+                    points.push({ originX: x, originY: y, currentX: x, currentY: y });
                 }
             }
         }
 
-        function renderSystem() {
+        function renderFrame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Desktop Ghost Cursor (delayed chase)
-            ghostPos.x += (mouse.x - ghostPos.x) * 0.08;
-            ghostPos.y += (mouse.y - ghostPos.y) * 0.08;
-            ghost.style.transform = `translate(${ghostPos.x}px, ${ghostPos.y}px)`;
+            // Smooth Ambient Ghost (Desktop)
+            if (!prefersReducedMotion) {
+                ghostPos.x += (mouse.x - ghostPos.x) * 0.05;
+                ghostPos.y += (mouse.y - ghostPos.y) * 0.05;
+                ghost.style.transform = `translate(${ghostPos.x}px, ${ghostPos.y}px)`;
+            }
 
-            // Render Touch Ripples
+            // Draw Mobile Ripples
             for(let i = ripples.length - 1; i >= 0; i--) {
                 let r = ripples[i];
-                r.radius += 3;
-                r.alpha -= 0.02;
+                r.radius += 2;
+                r.alpha -= 0.015;
                 
                 ctx.beginPath();
                 ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(96, 165, 250, ${r.alpha})`;
+                ctx.strokeStyle = `rgba(167, 139, 250, ${r.alpha})`; // Soft purple ripple
                 ctx.lineWidth = 1;
                 ctx.stroke();
 
                 if(r.alpha <= 0) ripples.splice(i, 1);
             }
 
-            ctx.fillStyle = 'rgba(140, 146, 165, 0.2)'; // Very subtle dots
+            // Draw Metallic Grid
+            ctx.fillStyle = 'rgba(139, 146, 165, 0.25)'; // Metallic Dark
 
-            // Render Grid Physics
-            for (let i = 0; i < points.length; i++) {
-                let p = points[i];
-                
-                if (mouse.active) {
+            for (let p of points) {
+                let targetX = p.originX;
+                let targetY = p.originY;
+
+                if (mouse.active && !prefersReducedMotion) {
                     let dx = mouse.x - p.originX;
                     let dy = mouse.y - p.originY;
                     let distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < repelRadius) {
                         let force = (repelRadius - distance) / repelRadius;
-                        let easeForce = force * force * (3 - 2 * force); 
+                        let easeForce = Math.pow(force, 2); // Soft easing curve
                         let angle = Math.atan2(dy, dx);
-                        p.targetX = p.originX - Math.cos(angle) * (easeForce * maxDisplacement);
-                        p.targetY = p.originY - Math.sin(angle) * (easeForce * maxDisplacement);
-                    } else {
-                        p.targetX = p.originX;
-                        p.targetY = p.originY;
+                        targetX -= Math.cos(angle) * (easeForce * maxDisplacement);
+                        targetY -= Math.sin(angle) * (easeForce * maxDisplacement);
                     }
-                } else {
-                    p.targetX = p.originX;
-                    p.targetY = p.originY;
                 }
 
-                p.currentX += (p.targetX - p.currentX) * 0.12;
-                p.currentY += (p.targetY - p.currentY) * 0.12;
+                p.currentX += (targetX - p.currentX) * 0.1;
+                p.currentY += (targetY - p.currentY) * 0.1;
 
                 ctx.beginPath();
                 ctx.arc(p.currentX, p.currentY, dotRadius, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            requestAnimationFrame(renderSystem);
+            requestAnimationFrame(renderFrame);
         }
 
-        window.addEventListener('resize', buildSystem);
-        buildSystem();
-        renderSystem();
+        window.addEventListener('resize', buildGrid);
+        buildGrid();
+        renderFrame();
 
-        // --- 2. Motion Reveal System ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -10% 0px',
-            threshold: 0.1
-        };
-
-        const revealObserver = new IntersectionObserver((entries, observer) => {
+        // --- 2. Scroll Reveal Observer ---
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
+                    entry.target.classList.add('active');
                     observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
 
-        document.querySelectorAll('.reveal-target').forEach((el) => {
-            revealObserver.observe(el);
-        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
