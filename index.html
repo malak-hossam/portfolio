@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malak Hossam | AI Systems Engineer</title>
+    <title>Malak Hossam | Applied AI Systems Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --graphite: #0a0a0c;
             --metallic-light: #e0e5ec;
-            --metallic-dark: #6b7280;
+            --metallic-dark: #8b92a5;
+            --accent: #60a5fa;
             --ease-fluid: cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
@@ -20,10 +21,10 @@
             color: var(--metallic-light); 
             overflow-x: hidden;
             margin: 0;
-            cursor: none; /* Hide default cursor for the custom ghost experience */
+            cursor: none;
         }
 
-        /* The Living Background */
+        /* --- Interactive Background System --- */
         #systemCanvas { 
             position: fixed; 
             top: 0; 
@@ -34,59 +35,62 @@
             pointer-events: none;
         }
 
-        /* Ghost Cursor */
         #ghostCursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 60%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 1;
-            filter: blur(20px);
+            filter: blur(25px);
             will-change: transform;
         }
 
-        /* Typography & Gradients */
+        /* --- Custom UI Elements --- */
         .text-metallic {
-            background: linear-gradient(135deg, var(--metallic-light) 0%, var(--metallic-dark) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, var(--metallic-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Ticket System Container */
         .system-container {
             position: relative;
             z-index: 10;
         }
 
-        /* Individual Ticket */
-        .ticket {
-            background: rgba(20, 20, 22, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            backdrop-filter: blur(8px);
+        /* Motion Language: Reveal Elements */
+        .reveal-target {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 1.2s var(--ease-fluid), transform 1.2s var(--ease-fluid), border-color 0.5s ease;
+            transition: opacity 1s var(--ease-fluid), transform 1s var(--ease-fluid);
         }
 
-        .ticket.revealed {
+        .reveal-target.revealed {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .ticket:hover {
-            border-color: rgba(255, 255, 255, 0.1);
-            background: rgba(30, 30, 35, 0.5);
+        /* Ticket / System Block */
+        .ticket {
+            background: rgba(20, 20, 22, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s var(--ease-fluid);
         }
 
-        /* Micro-interaction lines */
-        .ticket::before {
-            content: '';
+        .ticket:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 30, 35, 0.6);
+            transform: translateY(-4px);
+        }
+
+        /* Micro-interaction Line */
+        .ticket-accent {
             position: absolute;
             top: 0;
             left: 0;
@@ -94,10 +98,14 @@
             height: 0%;
             background: var(--metallic-dark);
             transition: height 0.6s var(--ease-fluid);
+            border-radius: 4px 0 0 4px;
         }
+        .ticket:hover .ticket-accent { height: 100%; background: var(--accent); }
 
-        .ticket:hover::before {
-            height: 100%;
+        /* Custom Cursors for interactive elements */
+        a, button { cursor: none; }
+        a:hover ~ #ghostCursor, button:hover ~ #ghostCursor {
+            background: radial-gradient(circle, rgba(96,165,250,0.05) 0%, rgba(255,255,255,0) 60%);
         }
     </style>
 </head>
@@ -106,115 +114,186 @@
     <canvas id="systemCanvas"></canvas>
     <div id="ghostCursor"></div>
 
-    <main class="system-container min-h-screen px-8 py-24 md:px-32 max-w-7xl mx-auto">
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center bg-black/20 backdrop-blur-md border-b border-white/5 reveal-target revealed">
+        <span class="font-medium tracking-tight text-white">MH.</span>
+        <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest text-gray-500 font-medium">
+            <a href="#solutions" class="hover:text-white transition-colors duration-300">Solutions</a>
+            <a href="#projects" class="hover:text-white transition-colors duration-300">Projects</a>
+            <a href="#resume" class="hover:text-white transition-colors duration-300">Resume</a>
+        </div>
+    </nav>
+
+    <main class="system-container px-6 md:px-24 max-w-7xl mx-auto">
         
-        <header class="mb-32 ticket revealed p-8">
-            <h1 class="text-5xl md:text-7xl font-medium tracking-tight text-metallic mb-6">Malak Hossam</h1>
-            <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">
-                Full-Stack AI Engineer. Architecting low-latency multimodal interactions, persistent memory layers, and intelligent automation systems.
-            </p>
-        </header>
+        <section class="min-h-screen flex flex-col justify-center pt-20">
+            <div class="reveal-target">
+                <p class="text-sm tracking-widest uppercase text-gray-500 mb-6">Applied AI Systems Engineer</p>
+                <h1 class="text-6xl md:text-8xl font-medium tracking-tight text-metallic mb-8 max-w-4xl">
+                    Malak Hossam
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed mb-12">
+                    Architecting intelligent systems. Specializing in low-latency multimodal interactions, persistent memory layers, and deep learning architectures.
+                </p>
+                <div class="flex space-x-6 text-sm font-medium tracking-wide">
+                    <a href="https://github.com/malak-hossam" target="_blank" class="px-6 py-3 bg-white text-black rounded hover:bg-gray-200 transition-colors">GitHub</a>
+                    <a href="https://linkedin.com/in/malak-hossam" target="_blank" class="px-6 py-3 border border-white/20 rounded hover:bg-white/10 transition-colors">LinkedIn</a>
+                </div>
+            </div>
+        </section>
 
-        <section>
-            <h2 class="text-sm tracking-widest uppercase text-gray-600 mb-12 ml-2">My Full Ticket Set</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section id="solutions" class="py-32 border-t border-white/5">
+            <h2 class="text-sm tracking-widest uppercase text-gray-500 mb-16 reveal-target">How I Solve Your AI Challenges</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">AI Backend & Integration</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Engineering scalable microservices and persistent memory layers optimized for low-latency streaming and multimodal data.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">FastAPI</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">REST APIs</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Async Services</span>
-                    </div>
+                <div class="ticket relative p-8 reveal-target">
+                    <div class="ticket-accent"></div>
+                    <h3 class="text-xl font-medium text-white mb-3">LLMs & Generative AI</h3>
+                    <p class="text-gray-400 leading-relaxed">Developing voice-to-voice and text-to-text interaction engines using real-time APIs. Building intelligent agents capable of complex reasoning.</p>
                 </div>
 
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">LLMs & Generative AI</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Developing voice-to-voice and text-to-text interaction engines using advanced conversational models and real-time APIs.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">GPT APIs</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">LLM Agents</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Prompt Engineering</span>
-                    </div>
+                <div class="ticket relative p-8 reveal-target">
+                    <div class="ticket-accent"></div>
+                    <h3 class="text-xl font-medium text-white mb-3">RAG & Knowledge Systems</h3>
+                    <p class="text-gray-400 leading-relaxed">Implementing contextual pipelines integrating vector search (Supabase), custom embeddings, and persistent long-term memory for coaching and analysis.</p>
                 </div>
 
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">RAG & Knowledge Systems</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Implementing contextual pipelines integrating vector embeddings, hybrid search, and persistent context injection.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">LangChain</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Vector Embeddings</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Context Injection</span>
-                    </div>
+                <div class="ticket relative p-8 reveal-target">
+                    <div class="ticket-accent"></div>
+                    <h3 class="text-xl font-medium text-white mb-3">AI & ML Engineering</h3>
+                    <p class="text-gray-400 leading-relaxed">Training and fine-tuning CNNs/ResNets for precise computer vision tasks, alongside optimizing Arabic sentiment classification models.</p>
                 </div>
 
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">Automation & Intelligent Interaction</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Building end-to-end desktop automation pipelines for data retrieval, visual target identification, and automated formatting.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">Desktop Automation</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Computer Vision</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">OCR</span>
-                    </div>
-                </div>
-
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">AI & ML Systems</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Designing and fine-tuning neural architectures for accurate classification and high-performance deep learning applications.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">PyTorch</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Deep Learning</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Fine-Tuning</span>
-                    </div>
-                </div>
-
-                <div class="ticket p-8 observer-target">
-                    <h3 class="text-xl font-medium text-metallic mb-3">Specialization & Deployment</h3>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">Executing complex morphological analyses in low-resource environments and containerizing models for rapid CI/CD.</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-gray-400">
-                        <span class="px-3 py-1 bg-white/5 rounded">Arabic NLP</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">Docker Compose</span>
-                        <span class="px-3 py-1 bg-white/5 rounded">AI Deployment</span>
-                    </div>
+                <div class="ticket relative p-8 reveal-target">
+                    <div class="ticket-accent"></div>
+                    <h3 class="text-xl font-medium text-white mb-3">Automation & Intelligent Interaction</h3>
+                    <p class="text-gray-400 leading-relaxed">Engineering end-to-end desktop automation pipelines that fetch data, identify visual targets, and format outputs seamlessly without human intervention.</p>
                 </div>
 
             </div>
         </section>
+
+        <section id="tech-stack" class="py-32 border-t border-white/5">
+            <h2 class="text-sm tracking-widest uppercase text-gray-500 mb-16 reveal-target">System Capabilities (Tech Stack)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div class="reveal-target border-l border-white/10 pl-6">
+                    <h4 class="text-white font-medium mb-4">AI Systems</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li>Python • C++ • Java</li>
+                        <li>PyTorch • TensorFlow</li>
+                        <li>CNN • RNN/LSTM • GANs</li>
+                    </ul>
+                </div>
+
+                <div class="reveal-target border-l border-white/10 pl-6 delay-100">
+                    <h4 class="text-white font-medium mb-4">LLMs & RAG</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li>LangChain • CrewAI</li>
+                        <li>Transformers (BERT, GPT)</li>
+                        <li>Vector Embeddings</li>
+                    </ul>
+                </div>
+
+                <div class="reveal-target border-l border-white/10 pl-6 delay-200">
+                    <h4 class="text-white font-medium mb-4">Deployment & DevOps</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li>FastAPI • REST APIs</li>
+                        <li>Docker • CI/CD Pipelines</li>
+                        <li>Git Version Control</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" class="py-32 border-t border-white/5">
+            <h2 class="text-sm tracking-widest uppercase text-gray-500 mb-16 reveal-target">Engineered Systems (Projects)</h2>
+            <div class="space-y-8">
+                
+                <div class="ticket relative p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center reveal-target">
+                    <div class="ticket-accent"></div>
+                    <div class="max-w-2xl">
+                        <span class="text-xs font-medium text-blue-400 uppercase tracking-wider mb-2 block">Arabic NLP Specialization</span>
+                        <h3 class="text-2xl font-medium text-white mb-2">AraBART Morphology Model</h3>
+                        <p class="text-gray-400 leading-relaxed">Fine-tuned on MASAQ with CAMEL Tools to extract root, POS, and case features, reaching 82% accuracy in morphological analysis.</p>
+                    </div>
+                    <a href="https://github.com/malak-hossam" target="_blank" class="mt-6 md:mt-0 text-sm font-medium text-white hover:text-blue-400 transition-colors flex items-center gap-2">
+                        View Code <span class="text-lg">↗</span>
+                    </a>
+                </div>
+
+                <div class="ticket relative p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center reveal-target">
+                    <div class="ticket-accent"></div>
+                    <div class="max-w-2xl">
+                        <span class="text-xs font-medium text-blue-400 uppercase tracking-wider mb-2 block">Computer Vision</span>
+                        <h3 class="text-2xl font-medium text-white mb-2">Butterfly Image Classification</h3>
+                        <p class="text-gray-400 leading-relaxed">Engineered a custom CNN and fine-tuned ResNet architecture using PyTorch and OpenCV, achieving a 94% classification accuracy.</p>
+                    </div>
+                    <a href="https://kaggle.com/malakhossam1" target="_blank" class="mt-6 md:mt-0 text-sm font-medium text-white hover:text-blue-400 transition-colors flex items-center gap-2">
+                        View Live <span class="text-lg">↗</span>
+                    </a>
+                </div>
+
+                <div class="ticket relative p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center reveal-target">
+                    <div class="ticket-accent"></div>
+                    <div class="max-w-2xl">
+                        <span class="text-xs font-medium text-blue-400 uppercase tracking-wider mb-2 block">AI Backend & Microservices</span>
+                        <h3 class="text-2xl font-medium text-white mb-2">Lexical Analysis Agent</h3>
+                        <p class="text-gray-400 leading-relaxed">FastAPI microservice handling synonyms, antonyms, and plurals with Gemini/Tavily fallback logic. Reduced lookup latency by 40%.</p>
+                    </div>
+                    <a href="https://github.com/malak-hossam" target="_blank" class="mt-6 md:mt-0 text-sm font-medium text-white hover:text-blue-400 transition-colors flex items-center gap-2">
+                        View Code <span class="text-lg">↗</span>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="resume" class="py-32 border-t border-white/5 flex flex-col md:flex-row justify-between items-start gap-16 reveal-target">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-medium text-white mb-6">Documentation</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">Review my full academic background (BSc Computer Science, 3.87 GPA) and detailed technical history.</p>
+                <a href="#" class="inline-flex items-center px-6 py-3 border border-white/20 rounded text-sm font-medium hover:bg-white hover:text-black transition-all">
+                    Download Resume PDF ↓
+                </a>
+            </div>
+            
+            <div class="md:w-1/2" id="contact">
+                <h2 class="text-3xl font-medium text-white mb-6">Initialize Contact</h2>
+                <p class="text-gray-400 mb-8 leading-relaxed">Available for discussions regarding AI architecture, MLOps, and backend engineering opportunities.</p>
+                <a href="mailto:malak.hossam.work@gmail.com" class="inline-flex items-center px-6 py-3 bg-white text-black rounded text-sm font-medium hover:bg-gray-200 transition-all">
+                    malak.hossam.work@gmail.com ↗
+                </a>
+            </div>
+        </section>
+
     </main>
 
     <script>
-        // --- System Core: Motion Language ---
+        // --- 1. Interactive Background System (Canvas) ---
         const canvas = document.getElementById('systemCanvas');
         const ctx = canvas.getContext('2d');
         const ghost = document.getElementById('ghostCursor');
         
-        // Input state
-        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, active: false };
+        let mouse = { x: -1000, y: -1000, active: false };
         let ghostPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-        // Grid Configuration
-        const spacing = 40; 
+        const spacing = 45; 
         const dotRadius = 1;
-        const repelRadius = 180;
-        const maxDisplacement = 35;
+        const repelRadius = 160;
+        const maxDisplacement = 25;
         let points = [];
 
-        // Input Listeners
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
+        // Track user interaction
+        const updateMouse = (x, y) => {
+            mouse.x = x;
+            mouse.y = y;
             mouse.active = true;
-        });
+        };
 
-        window.addEventListener('touchmove', (e) => {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-            mouse.active = true;
-        });
+        window.addEventListener('mousemove', (e) => updateMouse(e.clientX, e.clientY));
+        window.addEventListener('touchmove', (e) => updateMouse(e.touches[0].clientX, e.touches[0].clientY));
 
-        // Initialize Grid
         function buildSystem() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -231,17 +310,15 @@
             }
         }
 
-        // Render Loop
         function renderSystem() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Smooth Ghost Follow (Linear Interpolation)
+            // Ghost Cursor interpolation (delayed chase)
             ghostPos.x += (mouse.x - ghostPos.x) * 0.08;
             ghostPos.y += (mouse.y - ghostPos.y) * 0.08;
             ghost.style.transform = `translate(${ghostPos.x}px, ${ghostPos.y}px)`;
 
-            // Calculate Grid Physics
-            ctx.fillStyle = 'rgba(160, 165, 180, 0.4)'; // Metallic gray dots
+            ctx.fillStyle = 'rgba(140, 146, 165, 0.3)'; 
 
             for (let i = 0; i < points.length; i++) {
                 let p = points[i];
@@ -253,8 +330,7 @@
 
                     if (distance < repelRadius) {
                         let force = (repelRadius - distance) / repelRadius;
-                        // Use cubic easing for the force curve
-                        let easeForce = force * force * (3 - 2 * force); 
+                        let easeForce = force * force * (3 - 2 * force); // Smooth curve
                         let angle = Math.atan2(dy, dx);
                         
                         p.targetX = p.originX - Math.cos(angle) * (easeForce * maxDisplacement);
@@ -265,11 +341,10 @@
                     }
                 }
 
-                // Smoothly move towards target
-                p.currentX += (p.targetX - p.currentX) * 0.1;
-                p.currentY += (p.targetY - p.currentY) * 0.1;
+                // Smoothly return to origin or move to target
+                p.currentX += (p.targetX - p.currentX) * 0.12;
+                p.currentY += (p.targetY - p.currentY) * 0.12;
 
-                // Draw
                 ctx.beginPath();
                 ctx.arc(p.currentX, p.currentY, dotRadius, 0, Math.PI * 2);
                 ctx.fill();
@@ -278,17 +353,22 @@
             requestAnimationFrame(renderSystem);
         }
 
-        // --- Ticket System: Progressive Reveal ---
+        // Initialize Canvas
+        window.addEventListener('resize', buildSystem);
+        buildSystem();
+        renderSystem();
+
+        // --- 2. Motion Reveal System (Intersection Observer) ---
         const observerOptions = {
             root: null,
-            rootMargin: '0px',
+            rootMargin: '0px 0px -50px 0px',
             threshold: 0.15
         };
 
-        const ticketObserver = new IntersectionObserver((entries, observer) => {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Slight delay to ensure smooth layout calculation before animating
+                    // Staggered reveal based on element order
                     setTimeout(() => {
                         entry.target.classList.add('revealed');
                     }, 50);
@@ -297,14 +377,8 @@
             });
         }, observerOptions);
 
-        // Initialization
-        window.addEventListener('resize', buildSystem);
-        buildSystem();
-        renderSystem();
-
-        // Attach observer to tickets
-        document.querySelectorAll('.observer-target').forEach((el) => {
-            ticketObserver.observe(el);
+        document.querySelectorAll('.reveal-target').forEach((el) => {
+            revealObserver.observe(el);
         });
 
     </script>
