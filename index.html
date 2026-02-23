@@ -27,6 +27,17 @@
       --r:18px;
       --r2:28px;
       --headerH:72px;
+
+      /* Paper (scene backgrounds) variables — updated by JS */
+      --paperOpacity: 0;          /* 0 in hero, 1 afterwards */
+      --paperInset: 34px;         /* margin around the “paper” */
+      --paperRadius: 34px;
+      --paperAngle: 135deg;       /* diagonal split angle */
+      --paperSplit: 52%;          /* where the split happens */
+      --paperA: rgba(33, 18, 66, .95);   /* dark purple */
+      --paperB: rgba(94, 62, 160, .92);  /* lighter purple */
+      --paperC: rgba(181,155,255,.18);   /* soft glow */
+      --paperLine: rgba(255,255,255,.10);
     }
 
     *{ box-sizing:border-box; }
@@ -38,26 +49,42 @@
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
       background: var(--bg0);
       overflow-x:hidden;
-      cursor: none;
+      cursor:none;
     }
     a{ color:inherit; text-decoration:none; }
     .container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
     main{ padding-top:var(--headerH); }
 
+    /* cinematic scroll feel */
+    main{
+      scroll-snap-type: y mandatory;
+    }
+    section{
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    @media (prefers-reduced-motion: reduce){
+      main{ scroll-snap-type: none; }
+      body{ cursor:auto; }
+    }
+
     /* =========================================
-       ✅ BACKGROUND SYSTEM
-       - Hero video ONLY in first scene
-       - For other sections: connected geometric shapes morph
+       BACKGROUND SYSTEM
+       - Video only in scene 0 (About hero)
+       - Paper sheet with diagonal split for scenes 1+
        ========================================= */
     .bg-wrap{
       position:fixed;
       inset:0;
       z-index:-50;
       overflow:hidden;
-      background:#05040c;
+      background:
+        radial-gradient(1100px 700px at 20% 10%, rgba(181,155,255,.14), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(124,243,255,.08), transparent 62%),
+        linear-gradient(180deg, #05040c, #070510 38%, #120a25);
     }
 
-    /* ===== Hero video layer (ONLY for first section) */
+    /* Video layer (only for first scene) */
     .bg-video{
       position:absolute;
       inset:0;
@@ -66,48 +93,62 @@
       object-fit:cover;
       transform: scale(1.06);
       filter: brightness(.74) contrast(1.06) saturate(1.06);
-      opacity: 0; /* turned on ONLY when in first section */
-      transition: opacity 780ms cubic-bezier(.2,.9,.2,1);
+      opacity: 0;
+      transition: opacity 900ms cubic-bezier(.2,.9,.2,1);
       will-change: opacity;
       z-index:2;
     }
 
-    /* ===== Geometric shapes layer (for sections after hero) */
-    .geo{
+    /* Paper layer (scenes 1+) */
+    .paper{
       position:absolute;
-      inset:0;
+      inset: var(--paperInset);
+      border-radius: var(--paperRadius);
+      opacity: var(--paperOpacity);
+      transition: opacity 700ms cubic-bezier(.2,.9,.2,1);
+      will-change: opacity, transform, filter;
       z-index:3;
       pointer-events:none;
-      opacity: 1;
+
+      /* the “sheet” look */
+      box-shadow:
+        0 30px 90px rgba(0,0,0,.60),
+        0 0 0 1px rgba(255,255,255,.10) inset;
+
+      /* diagonal split background */
+      background:
+        /* soft glow blob */
+        radial-gradient(900px 560px at 70% 30%, var(--paperC), transparent 60%),
+        /* subtle noise-ish overlay */
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0)),
+        /* MAIN diagonal split */
+        linear-gradient(
+          var(--paperAngle),
+          var(--paperA) 0%,
+          var(--paperA) calc(var(--paperSplit) - 1.1%),
+          var(--paperLine) calc(var(--paperSplit) - 0.6%),
+          var(--paperLine) calc(var(--paperSplit) + 0.6%),
+          var(--paperB) calc(var(--paperSplit) + 1.1%),
+          var(--paperB) 100%
+        );
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .shape{
-      position:absolute;
-      border-radius: 18px;
-      opacity: .0;
-      transform: translate3d(0,0,0) scale(1);
-      filter: blur(0px);
-      transition:
-        opacity 780ms cubic-bezier(.2,.9,.2,1),
-        transform 980ms cubic-bezier(.2,.9,.2,1),
-        border-radius 980ms cubic-bezier(.2,.9,.2,1),
-        filter 980ms cubic-bezier(.2,.9,.2,1),
-        background 980ms cubic-bezier(.2,.9,.2,1);
-      will-change: transform, opacity, border-radius, filter, background;
-      mix-blend-mode: screen;
-    }
-
-    /* cinematic overlays */
+    /* Cinematic overlay for readability */
     .cinematic{
       position:absolute;
       inset:0;
       z-index:7;
       pointer-events:none;
       background:
-        radial-gradient(1200px 720px at 18% 45%, rgba(5,4,12,.88), transparent 62%),
-        radial-gradient(1000px 650px at 70% 30%, rgba(5,4,12,.55), transparent 60%),
-        linear-gradient(180deg, rgba(5,4,12,.18), rgba(5,4,12,.84));
+        radial-gradient(1200px 720px at 18% 45%, rgba(5,4,12,.86), transparent 62%),
+        radial-gradient(1000px 650px at 70% 30%, rgba(5,4,12,.50), transparent 60%),
+        linear-gradient(180deg, rgba(5,4,12,.16), rgba(5,4,12,.82));
     }
+
+    /* subtle stars */
     .stars{
       position:absolute; inset:0;
       z-index:6;
@@ -118,9 +159,11 @@
         radial-gradient(1px 1px at 65% 30%, rgba(255,255,255,.60), transparent 55%),
         radial-gradient(2px 2px at 82% 58%, rgba(255,255,255,.78), transparent 55%),
         radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.50), transparent 55%);
-      opacity:.12;
+      opacity:.10;
       mix-blend-mode: screen;
     }
+
+    /* film grain */
     .grain{
       position:absolute;
       inset:-30%;
@@ -138,6 +181,9 @@
       50%{ transform: translate3d(-1%, -2%, 0); }
       75%{ transform: translate3d(2%, 2%, 0); }
       100%{ transform: translate3d(0,0,0); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .grain{ display:none; }
     }
 
     /* =========================================
@@ -342,7 +388,7 @@
     }
 
     /* =========================================
-       ✅ Custom cursor + colored dot trail
+       Custom cursor + colored dot trail
        ========================================= */
     .cursor{
       position:fixed;
@@ -367,7 +413,6 @@
       pointer-events:none;
       opacity:0;
       will-change: transform, opacity;
-      filter: blur(.0px);
     }
 
     @media (max-width: 980px){
@@ -377,13 +422,7 @@
       .proj-grid{ grid-template-columns: 1fr; }
       .proj-grid[data-active] .proj{ transform:none !important; opacity:1 !important; }
       .panel{ padding:18px; }
-    }
-    @media (prefers-reduced-motion: reduce){
-      html{ scroll-behavior:auto; }
-      body{ cursor:auto; }
-      .cursor,.trail-dot{ display:none; }
-      .reveal{ transition:none; opacity:1; transform:none; filter:none; }
-      .grain{ display:none; }
+      :root{ --paperInset: 16px; }
     }
   </style>
 </head>
@@ -391,20 +430,13 @@
 <body>
   <!-- Background system -->
   <div class="bg-wrap" aria-hidden="true">
-    <!-- ✅ video only for first section -->
+    <!-- Video (Scene 0 only) -->
     <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="metadata">
       <source src="./assets/skyline.mp4" type="video/mp4">
     </video>
 
-    <!-- ✅ geometric shapes (morph per section) -->
-    <div id="geo" class="geo">
-      <div class="shape" id="s1"></div>
-      <div class="shape" id="s2"></div>
-      <div class="shape" id="s3"></div>
-      <div class="shape" id="s4"></div>
-      <div class="shape" id="s5"></div>
-      <div class="shape" id="s6"></div>
-    </div>
+    <!-- Paper (Scenes 1+) -->
+    <div id="paper" class="paper"></div>
 
     <div class="stars"></div>
     <div class="cinematic"></div>
@@ -452,6 +484,7 @@
       </div>
     </section>
 
+    <!-- Scene 1 -->
     <section id="experience" data-scene="1">
       <div class="container">
         <div class="panel reveal">
@@ -465,6 +498,7 @@
       </div>
     </section>
 
+    <!-- Scene 2 -->
     <section id="projects" data-scene="2">
       <div class="container">
         <div class="panel reveal">
@@ -493,6 +527,7 @@
       </div>
     </section>
 
+    <!-- Scene 3 -->
     <section id="skills" data-scene="3">
       <div class="container">
         <div class="panel reveal">
@@ -503,6 +538,7 @@
       </div>
     </section>
 
+    <!-- Scene 4 -->
     <section id="contact" data-scene="4">
       <div class="container">
         <div class="panel reveal">
@@ -552,7 +588,7 @@
     const reveals = Array.from(document.querySelectorAll(".reveal"));
     const revObs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
-    }, { threshold: 0.15, rootMargin: "0px 0px -15% 0px" });
+    }, { threshold: 0.14, rootMargin: "0px 0px -18% 0px" });
     reveals.forEach(el => revObs.observe(el));
 
     // Projects hover/focus pop
@@ -566,21 +602,12 @@
       grid.dataset.active = "0";
     }
 
-    // ✅ Background switching:
-    // - video visible ONLY when scene=0 (About)
-    // - geometric shapes morph for scene 1..4
+    // ===== Background scenes logic (video only in scene 0, paper changes per section)
     const bgVideo = document.getElementById("bgVideo");
-    const shapes = [
-      document.getElementById("s1"),
-      document.getElementById("s2"),
-      document.getElementById("s3"),
-      document.getElementById("s4"),
-      document.getElementById("s5"),
-      document.getElementById("s6"),
-    ];
+    const paper = document.getElementById("paper");
     const sections = Array.from(document.querySelectorAll("main section[data-scene]"));
 
-    // Mouse parallax for shapes
+    // Mouse parallax for paper (subtle)
     let mx = 0, my = 0;
     window.addEventListener("mousemove", (e) => {
       const w = window.innerWidth || 1;
@@ -592,74 +619,28 @@
     function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
     function lerp(a,b,t){ return a + (b-a)*t; }
 
-    // Scene presets for geometric layouts (rectangles + circles)
-    // Each scene defines 6 shapes: x,y,w,h,rad,opacity,blur + gradient
-    const SCENES = [
-      // scene 0 (About) - geo almost hidden, video ON
-      [
-        {x:10,y:20,w:420,h:220,rad:26,op:0.10,blur:0, g:["rgba(181,155,255,.20)","rgba(124,243,255,.10)"]},
-        {x:70,y:18,w:320,h:180,rad:999,op:0.08,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.10)"]},
-        {x:65,y:70,w:520,h:260,rad:28,op:0.10,blur:0, g:["rgba(124,243,255,.14)","rgba(181,155,255,.10)"]},
-        {x:20,y:74,w:280,h:280,rad:999,op:0.06,blur:0, g:["rgba(181,155,255,.14)","rgba(255,179,214,.08)"]},
-        {x:40,y:40,w:240,h:140,rad:24,op:0.08,blur:0, g:["rgba(255,255,255,.08)","rgba(255,255,255,0)"]},
-        {x:48,y:10,w:700,h:380,rad:32,op:0.06,blur:0, g:["rgba(181,155,255,.10)","rgba(124,243,255,.06)"]},
-      ],
-      // scene 1 (Experience) - rect overlap + circle
-      [
-        {x:12,y:18,w:520,h:260,rad:30,op:0.20,blur:0, g:["rgba(181,155,255,.30)","rgba(181,155,255,.10)"]},
-        {x:55,y:24,w:420,h:240,rad:28,op:0.16,blur:0, g:["rgba(124,243,255,.20)","rgba(181,155,255,.10)"]},
-        {x:72,y:58,w:360,h:360,rad:999,op:0.14,blur:0, g:["rgba(255,179,214,.20)","rgba(124,243,255,.10)"]},
-        {x:18,y:70,w:580,h:280,rad:34,op:0.14,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.08)"]},
-        {x:38,y:46,w:760,h:340,rad:40,op:0.08,blur:0, g:["rgba(255,255,255,.08)","rgba(255,255,255,0)"]},
-        {x:84,y:18,w:280,h:140,rad:24,op:0.10,blur:0, g:["rgba(124,243,255,.16)","rgba(255,179,214,.08)"]},
-      ],
-      // scene 2 (Projects) - more blocks, more contrast
-      [
-        {x:10,y:22,w:620,h:300,rad:34,op:0.20,blur:0, g:["rgba(124,243,255,.26)","rgba(181,155,255,.12)"]},
-        {x:62,y:16,w:420,h:220,rad:28,op:0.18,blur:0, g:["rgba(181,155,255,.28)","rgba(255,179,214,.10)"]},
-        {x:70,y:64,w:440,h:300,rad:40,op:0.14,blur:0, g:["rgba(255,179,214,.22)","rgba(124,243,255,.10)"]},
-        {x:18,y:72,w:320,h:320,rad:999,op:0.12,blur:0, g:["rgba(181,155,255,.18)","rgba(124,243,255,.10)"]},
-        {x:46,y:44,w:860,h:380,rad:44,op:0.08,blur:0, g:["rgba(255,255,255,.09)","rgba(255,255,255,0)"]},
-        {x:34,y:10,w:360,h:160,rad:26,op:0.12,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.08)"]},
-      ],
-      // scene 3 (Skills) - softer
-      [
-        {x:14,y:20,w:540,h:260,rad:32,op:0.18,blur:0, g:["rgba(181,155,255,.26)","rgba(124,243,255,.10)"]},
-        {x:60,y:26,w:520,h:260,rad:32,op:0.14,blur:0, g:["rgba(255,179,214,.18)","rgba(181,155,255,.10)"]},
-        {x:78,y:62,w:320,h:320,rad:999,op:0.12,blur:0, g:["rgba(124,243,255,.18)","rgba(255,179,214,.08)"]},
-        {x:16,y:72,w:680,h:300,rad:40,op:0.10,blur:0, g:["rgba(124,243,255,.14)","rgba(181,155,255,.08)"]},
-        {x:46,y:44,w:900,h:420,rad:46,op:0.07,blur:0, g:["rgba(255,255,255,.09)","rgba(255,255,255,0)"]},
-        {x:80,y:14,w:260,h:140,rad:24,op:0.10,blur:0, g:["rgba(181,155,255,.16)","rgba(124,243,255,.08)"]},
-      ],
-      // scene 4 (Contact) - bigger center shapes
-      [
-        {x:12,y:22,w:620,h:280,rad:36,op:0.18,blur:0, g:["rgba(124,243,255,.22)","rgba(181,155,255,.10)"]},
-        {x:58,y:18,w:520,h:240,rad:34,op:0.16,blur:0, g:["rgba(181,155,255,.26)","rgba(255,179,214,.10)"]},
-        {x:66,y:58,w:380,h:380,rad:999,op:0.14,blur:0, g:["rgba(255,179,214,.22)","rgba(124,243,255,.10)"]},
-        {x:18,y:70,w:700,h:320,rad:42,op:0.12,blur:0, g:["rgba(181,155,255,.18)","rgba(124,243,255,.08)"]},
-        {x:44,y:44,w:940,h:420,rad:50,op:0.07,blur:0, g:["rgba(255,255,255,.10)","rgba(255,255,255,0)"]},
-        {x:84,y:14,w:280,h:150,rad:26,op:0.10,blur:0, g:["rgba(124,243,255,.16)","rgba(255,179,214,.08)"]},
-      ],
+    // Scenes after hero:
+    // We morph the diagonal angle + split position + color pair.
+    // This creates a connected “tilted line moves toward center” look.
+    const PAPER_SCENES = [
+      // scene 0 (hero): paper off
+      { on:0, angle:135, split:52, A:[16,10,32,.0], B:[40,24,78,.0], C:[181,155,255,.0] },
+
+      // scene 1 (experience): diagonal from top-left to bottom-right
+      { on:1, angle:132, split:56, A:[20,12,44,.95], B:[88,58,160,.90], C:[181,155,255,.18] },
+
+      // scene 2 (projects): line moves closer to center + slightly different purples
+      { on:1, angle:148, split:50, A:[26,14,56,.95], B:[120,80,200,.88], C:[124,243,255,.12] },
+
+      // scene 3 (skills): line tilts other way a bit
+      { on:1, angle:122, split:47, A:[22,12,52,.95], B:[98,66,176,.90], C:[255,179,214,.12] },
+
+      // scene 4 (contact): settle with a clean split
+      { on:1, angle:138, split:54, A:[18,10,40,.95], B:[110,74,190,.90], C:[181,155,255,.16] },
     ];
 
-    function applyShape(el, cfg, mouseAmt){
-      el.style.opacity = cfg.op.toFixed(3);
-      el.style.borderRadius = cfg.rad + "px";
-      el.style.filter = `blur(${cfg.blur}px)`;
-      el.style.background = `linear-gradient(135deg, ${cfg.g[0]}, ${cfg.g[1]})`;
-
-      // parallax
-      const dx = mx * mouseAmt;
-      const dy = my * mouseAmt;
-
-      el.style.left = cfg.x + "%";
-      el.style.top = cfg.y + "%";
-      el.style.width = cfg.w + "px";
-      el.style.height = cfg.h + "px";
-
-      el.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1)`;
-      // keep them visible after first reveal
-      if (el.style.opacity === "0") el.style.opacity = "0.001";
+    function rgba(arr){
+      return `rgba(${arr[0]},${arr[1]},${arr[2]},${arr[3]})`;
     }
 
     function pickScene(){
@@ -675,24 +656,25 @@
         if (d < bestDist){ bestDist = d; bestIdx = i; }
       });
 
+      // blend into next scene in last ~38% for cinematic transition
       const curSec = sections.find(s => parseInt(s.dataset.scene,10) === bestIdx) || sections[0];
       const r = curSec.getBoundingClientRect();
-      const start = r.height * 0.65;
+      const start = r.height * 0.62;
       const inside = clamp(-r.top, 0, r.height);
       const t = clamp((inside - start) / Math.max(1, (r.height - start)), 0, 1);
 
       return { i: bestIdx, t };
     }
 
-    function interpCfg(a,b,t){
-      // linear interpolate core geometry; keep gradients swapped mid-way for clean transitions
+    function interpScene(a,b,t){
+      const lerpArr = (x,y)=>[lerp(x[0],y[0],t), lerp(x[1],y[1],t), lerp(x[2],y[2],t), lerp(x[3],y[3],t)];
       return {
-        x: lerp(a.x,b.x,t), y: lerp(a.y,b.y,t),
-        w: lerp(a.w,b.w,t), h: lerp(a.h,b.h,t),
-        rad: lerp(a.rad,b.rad,t),
-        op: lerp(a.op,b.op,t),
-        blur: lerp(a.blur,b.blur,t),
-        g: (t < 0.5 ? a.g : b.g)
+        on: (t < 0.5 ? a.on : b.on),
+        angle: lerp(a.angle,b.angle,t),
+        split: lerp(a.split,b.split,t),
+        A: lerpArr(a.A,b.A),
+        B: lerpArr(a.B,b.B),
+        C: lerpArr(a.C,b.C),
       };
     }
 
@@ -700,31 +682,28 @@
       if (reduceMotion) return;
 
       const { i, t } = pickScene();
-      const cur = SCENES[i] || SCENES[0];
-      const nxt = SCENES[Math.min(i+1, SCENES.length-1)] || cur;
+      const s1 = PAPER_SCENES[i] || PAPER_SCENES[0];
+      const s2 = PAPER_SCENES[Math.min(i+1, PAPER_SCENES.length-1)] || s1;
+      const s = interpScene(s1,s2,t);
 
-      // video only for scene 0
-      bgVideo.style.opacity = (i === 0 && t < 0.92) ? "1" : "0";
+      // video only when at top scene (0) and not too far into transition
+      const videoOn = (i === 0 && t < 0.88);
+      bgVideo.style.opacity = videoOn ? "1" : "0";
 
-      // shapes visible mostly after scene 0
-      for (let k=0; k<shapes.length; k++){
-        const cfg = interpCfg(cur[k], nxt[k], t);
-        // slightly stronger parallax for nearer shapes
-        const mouseAmt = 18 - k*2.4;
-        applyShape(shapes[k], cfg, mouseAmt);
-      }
+      // paper visible after leaving hero
+      const paperOn = (!videoOn && (i >= 0)) ? 1 : 0;
+      document.documentElement.style.setProperty("--paperOpacity", paperOn ? String(clamp((i===0? t : 1), 0, 1)) : "0");
 
-      // if scene is 0 (about), keep shapes very subtle
-      if (i === 0){
-        shapes.forEach((el, idx) => {
-          el.style.opacity = String(Math.min(parseFloat(el.style.opacity || "0"), 0.10));
-        });
-      } else {
-        shapes.forEach((el) => {
-          const op = parseFloat(el.style.opacity || "0");
-          el.style.opacity = String(Math.max(op, 0.08)); // ensure visible
-        });
-      }
+      document.documentElement.style.setProperty("--paperAngle", `${s.angle.toFixed(2)}deg`);
+      document.documentElement.style.setProperty("--paperSplit", `${s.split.toFixed(2)}%`);
+      document.documentElement.style.setProperty("--paperA", rgba(s.A));
+      document.documentElement.style.setProperty("--paperB", rgba(s.B));
+      document.documentElement.style.setProperty("--paperC", rgba(s.C));
+
+      // subtle parallax on paper to feel alive
+      const px = mx * 10;
+      const py = my * 10;
+      paper.style.transform = `translate3d(${px}px, ${py}px, 0)`;
     }
 
     let ticking = false;
