@@ -38,13 +38,16 @@
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
       background: var(--bg0);
       overflow-x:hidden;
-      cursor: none; /* we will render our own cursor + trail */
+      cursor: none;
     }
     a{ color:inherit; text-decoration:none; }
     .container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
+    main{ padding-top:var(--headerH); }
 
     /* =========================================
-       ✅ BACKGROUND: video for first scene + cinematic overlay
+       ✅ BACKGROUND SYSTEM
+       - Hero video ONLY in first scene
+       - For other sections: connected geometric shapes morph
        ========================================= */
     .bg-wrap{
       position:fixed;
@@ -54,6 +57,7 @@
       background:#05040c;
     }
 
+    /* ===== Hero video layer (ONLY for first section) */
     .bg-video{
       position:absolute;
       inset:0;
@@ -62,28 +66,65 @@
       object-fit:cover;
       transform: scale(1.06);
       filter: brightness(.74) contrast(1.06) saturate(1.06);
-      opacity: 1;
-      transition: opacity 760ms cubic-bezier(.2,.9,.2,1);
+      opacity: 0; /* turned on ONLY when in first section */
+      transition: opacity 780ms cubic-bezier(.2,.9,.2,1);
       will-change: opacity;
+      z-index:2;
+    }
+
+    /* ===== Geometric shapes layer (for sections after hero) */
+    .geo{
+      position:absolute;
+      inset:0;
+      z-index:3;
+      pointer-events:none;
+      opacity: 1;
+    }
+
+    .shape{
+      position:absolute;
+      border-radius: 18px;
+      opacity: .0;
+      transform: translate3d(0,0,0) scale(1);
+      filter: blur(0px);
+      transition:
+        opacity 780ms cubic-bezier(.2,.9,.2,1),
+        transform 980ms cubic-bezier(.2,.9,.2,1),
+        border-radius 980ms cubic-bezier(.2,.9,.2,1),
+        filter 980ms cubic-bezier(.2,.9,.2,1),
+        background 980ms cubic-bezier(.2,.9,.2,1);
+      will-change: transform, opacity, border-radius, filter, background;
+      mix-blend-mode: screen;
     }
 
     /* cinematic overlays */
     .cinematic{
       position:absolute;
       inset:0;
-      z-index:5;
+      z-index:7;
       pointer-events:none;
       background:
         radial-gradient(1200px 720px at 18% 45%, rgba(5,4,12,.88), transparent 62%),
         radial-gradient(1000px 650px at 70% 30%, rgba(5,4,12,.55), transparent 60%),
-        linear-gradient(180deg, rgba(5,4,12,.22), rgba(5,4,12,.82));
+        linear-gradient(180deg, rgba(5,4,12,.18), rgba(5,4,12,.84));
     }
-
-    /* film grain */
+    .stars{
+      position:absolute; inset:0;
+      z-index:6;
+      pointer-events:none;
+      background:
+        radial-gradient(2px 2px at 12% 22%, rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(1.5px 1.5px at 26% 74%, rgba(255,255,255,.70), transparent 55%),
+        radial-gradient(1px 1px at 65% 30%, rgba(255,255,255,.60), transparent 55%),
+        radial-gradient(2px 2px at 82% 58%, rgba(255,255,255,.78), transparent 55%),
+        radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.50), transparent 55%);
+      opacity:.12;
+      mix-blend-mode: screen;
+    }
     .grain{
       position:absolute;
       inset:-30%;
-      z-index:6;
+      z-index:8;
       pointer-events:none;
       opacity:.10;
       mix-blend-mode: overlay;
@@ -97,21 +138,6 @@
       50%{ transform: translate3d(-1%, -2%, 0); }
       75%{ transform: translate3d(2%, 2%, 0); }
       100%{ transform: translate3d(0,0,0); }
-    }
-
-    /* subtle stars */
-    .stars{
-      position:absolute; inset:0;
-      z-index:4;
-      pointer-events:none;
-      background:
-        radial-gradient(2px 2px at 12% 22%, rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(1.5px 1.5px at 26% 74%, rgba(255,255,255,.70), transparent 55%),
-        radial-gradient(1px 1px at 65% 30%, rgba(255,255,255,.60), transparent 55%),
-        radial-gradient(2px 2px at 82% 58%, rgba(255,255,255,.78), transparent 55%),
-        radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.50), transparent 55%);
-      opacity:.14;
-      mix-blend-mode: screen;
     }
 
     /* =========================================
@@ -150,10 +176,8 @@
     .links a:hover{ color:var(--text); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.12); }
     .links a.active{ color:var(--text); background:rgba(181,155,255,.12); border-color:rgba(181,155,255,.25); }
 
-    main{ padding-top:var(--headerH); }
-
     /* =========================================
-       Sections + cinematic smooth entrance
+       Sections + cinematic reveal
        ========================================= */
     section{
       min-height: calc(100vh - var(--headerH));
@@ -163,7 +187,6 @@
       position:relative;
     }
 
-    /* smooth cinematic entrance per section */
     .reveal{
       opacity: 0;
       transform: translateY(18px) scale(.99);
@@ -199,14 +222,12 @@
       line-height:1.12;
     }
 
-    /* About hero */
     .hero-wrap{ max-width: 860px; }
     .hero-text{
       margin:14px 0 0;
       color:var(--muted);
       line-height:1.72;
       font-size:16px;
-      /* ✅ keep it short in width so it becomes 2–3 lines */
       max-width: 62ch;
     }
 
@@ -227,7 +248,6 @@
       transition:160ms ease;
       white-space:nowrap;
     }
-    /* ✅ stronger hover highlight */
     .btn:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,.12);
@@ -249,7 +269,6 @@
         0 0 38px rgba(124,243,255,.20);
     }
 
-    /* glass panels for other sections */
     .panel{
       border-radius: var(--r2);
       border:1px solid rgba(255,255,255,.14);
@@ -346,8 +365,9 @@
       transform: translate(-50%,-50%);
       z-index:999;
       pointer-events:none;
-      opacity:.0;
+      opacity:0;
       will-change: transform, opacity;
+      filter: blur(.0px);
     }
 
     @media (max-width: 980px){
@@ -360,19 +380,32 @@
     }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
-      .bg-video{ transition:none; }
-      .reveal{ transition:none; opacity:1; transform:none; filter:none; }
       body{ cursor:auto; }
       .cursor,.trail-dot{ display:none; }
+      .reveal{ transition:none; opacity:1; transform:none; filter:none; }
       .grain{ display:none; }
     }
   </style>
 </head>
 
 <body>
-  <!-- Background -->
+  <!-- Background system -->
   <div class="bg-wrap" aria-hidden="true">
-    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" src="assets/skyline.mp4"></video>
+    <!-- ✅ video only for first section -->
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="metadata">
+      <source src="./assets/skyline.mp4" type="video/mp4">
+    </video>
+
+    <!-- ✅ geometric shapes (morph per section) -->
+    <div id="geo" class="geo">
+      <div class="shape" id="s1"></div>
+      <div class="shape" id="s2"></div>
+      <div class="shape" id="s3"></div>
+      <div class="shape" id="s4"></div>
+      <div class="shape" id="s5"></div>
+      <div class="shape" id="s6"></div>
+    </div>
+
     <div class="stars"></div>
     <div class="cinematic"></div>
     <div class="grain"></div>
@@ -397,8 +430,8 @@
   </header>
 
   <main id="top">
-    <!-- FIRST PAGE = ABOUT -->
-    <section id="about">
+    <!-- Scene 0: About (video background) -->
+    <section id="about" data-scene="0">
       <div class="container">
         <div class="hero-wrap reveal">
           <p class="kicker">About</p>
@@ -419,7 +452,7 @@
       </div>
     </section>
 
-    <section id="experience">
+    <section id="experience" data-scene="1">
       <div class="container">
         <div class="panel reveal">
           <p class="kicker">Experience</p>
@@ -432,7 +465,7 @@
       </div>
     </section>
 
-    <section id="projects">
+    <section id="projects" data-scene="2">
       <div class="container">
         <div class="panel reveal">
           <p class="kicker">Projects</p>
@@ -460,7 +493,7 @@
       </div>
     </section>
 
-    <section id="skills">
+    <section id="skills" data-scene="3">
       <div class="container">
         <div class="panel reveal">
           <p class="kicker">Skills</p>
@@ -470,7 +503,7 @@
       </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" data-scene="4">
       <div class="container">
         <div class="panel reveal">
           <p class="kicker">Contact</p>
@@ -495,9 +528,7 @@
   </main>
 
   <script>
-    // year
     document.getElementById("year").textContent = new Date().getFullYear();
-
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Active nav highlight
@@ -520,9 +551,7 @@
     // Cinematic reveal on scroll
     const reveals = Array.from(document.querySelectorAll(".reveal"));
     const revObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add("in");
-      });
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
     }, { threshold: 0.15, rootMargin: "0px 0px -15% 0px" });
     reveals.forEach(el => revObs.observe(el));
 
@@ -537,7 +566,190 @@
       grid.dataset.active = "0";
     }
 
+    // ✅ Background switching:
+    // - video visible ONLY when scene=0 (About)
+    // - geometric shapes morph for scene 1..4
+    const bgVideo = document.getElementById("bgVideo");
+    const shapes = [
+      document.getElementById("s1"),
+      document.getElementById("s2"),
+      document.getElementById("s3"),
+      document.getElementById("s4"),
+      document.getElementById("s5"),
+      document.getElementById("s6"),
+    ];
+    const sections = Array.from(document.querySelectorAll("main section[data-scene]"));
+
+    // Mouse parallax for shapes
+    let mx = 0, my = 0;
+    window.addEventListener("mousemove", (e) => {
+      const w = window.innerWidth || 1;
+      const h = window.innerHeight || 1;
+      mx = (e.clientX / w - 0.5);
+      my = (e.clientY / h - 0.5);
+    }, { passive:true });
+
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+    function lerp(a,b,t){ return a + (b-a)*t; }
+
+    // Scene presets for geometric layouts (rectangles + circles)
+    // Each scene defines 6 shapes: x,y,w,h,rad,opacity,blur + gradient
+    const SCENES = [
+      // scene 0 (About) - geo almost hidden, video ON
+      [
+        {x:10,y:20,w:420,h:220,rad:26,op:0.10,blur:0, g:["rgba(181,155,255,.20)","rgba(124,243,255,.10)"]},
+        {x:70,y:18,w:320,h:180,rad:999,op:0.08,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.10)"]},
+        {x:65,y:70,w:520,h:260,rad:28,op:0.10,blur:0, g:["rgba(124,243,255,.14)","rgba(181,155,255,.10)"]},
+        {x:20,y:74,w:280,h:280,rad:999,op:0.06,blur:0, g:["rgba(181,155,255,.14)","rgba(255,179,214,.08)"]},
+        {x:40,y:40,w:240,h:140,rad:24,op:0.08,blur:0, g:["rgba(255,255,255,.08)","rgba(255,255,255,0)"]},
+        {x:48,y:10,w:700,h:380,rad:32,op:0.06,blur:0, g:["rgba(181,155,255,.10)","rgba(124,243,255,.06)"]},
+      ],
+      // scene 1 (Experience) - rect overlap + circle
+      [
+        {x:12,y:18,w:520,h:260,rad:30,op:0.20,blur:0, g:["rgba(181,155,255,.30)","rgba(181,155,255,.10)"]},
+        {x:55,y:24,w:420,h:240,rad:28,op:0.16,blur:0, g:["rgba(124,243,255,.20)","rgba(181,155,255,.10)"]},
+        {x:72,y:58,w:360,h:360,rad:999,op:0.14,blur:0, g:["rgba(255,179,214,.20)","rgba(124,243,255,.10)"]},
+        {x:18,y:70,w:580,h:280,rad:34,op:0.14,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.08)"]},
+        {x:38,y:46,w:760,h:340,rad:40,op:0.08,blur:0, g:["rgba(255,255,255,.08)","rgba(255,255,255,0)"]},
+        {x:84,y:18,w:280,h:140,rad:24,op:0.10,blur:0, g:["rgba(124,243,255,.16)","rgba(255,179,214,.08)"]},
+      ],
+      // scene 2 (Projects) - more blocks, more contrast
+      [
+        {x:10,y:22,w:620,h:300,rad:34,op:0.20,blur:0, g:["rgba(124,243,255,.26)","rgba(181,155,255,.12)"]},
+        {x:62,y:16,w:420,h:220,rad:28,op:0.18,blur:0, g:["rgba(181,155,255,.28)","rgba(255,179,214,.10)"]},
+        {x:70,y:64,w:440,h:300,rad:40,op:0.14,blur:0, g:["rgba(255,179,214,.22)","rgba(124,243,255,.10)"]},
+        {x:18,y:72,w:320,h:320,rad:999,op:0.12,blur:0, g:["rgba(181,155,255,.18)","rgba(124,243,255,.10)"]},
+        {x:46,y:44,w:860,h:380,rad:44,op:0.08,blur:0, g:["rgba(255,255,255,.09)","rgba(255,255,255,0)"]},
+        {x:34,y:10,w:360,h:160,rad:26,op:0.12,blur:0, g:["rgba(255,179,214,.16)","rgba(181,155,255,.08)"]},
+      ],
+      // scene 3 (Skills) - softer
+      [
+        {x:14,y:20,w:540,h:260,rad:32,op:0.18,blur:0, g:["rgba(181,155,255,.26)","rgba(124,243,255,.10)"]},
+        {x:60,y:26,w:520,h:260,rad:32,op:0.14,blur:0, g:["rgba(255,179,214,.18)","rgba(181,155,255,.10)"]},
+        {x:78,y:62,w:320,h:320,rad:999,op:0.12,blur:0, g:["rgba(124,243,255,.18)","rgba(255,179,214,.08)"]},
+        {x:16,y:72,w:680,h:300,rad:40,op:0.10,blur:0, g:["rgba(124,243,255,.14)","rgba(181,155,255,.08)"]},
+        {x:46,y:44,w:900,h:420,rad:46,op:0.07,blur:0, g:["rgba(255,255,255,.09)","rgba(255,255,255,0)"]},
+        {x:80,y:14,w:260,h:140,rad:24,op:0.10,blur:0, g:["rgba(181,155,255,.16)","rgba(124,243,255,.08)"]},
+      ],
+      // scene 4 (Contact) - bigger center shapes
+      [
+        {x:12,y:22,w:620,h:280,rad:36,op:0.18,blur:0, g:["rgba(124,243,255,.22)","rgba(181,155,255,.10)"]},
+        {x:58,y:18,w:520,h:240,rad:34,op:0.16,blur:0, g:["rgba(181,155,255,.26)","rgba(255,179,214,.10)"]},
+        {x:66,y:58,w:380,h:380,rad:999,op:0.14,blur:0, g:["rgba(255,179,214,.22)","rgba(124,243,255,.10)"]},
+        {x:18,y:70,w:700,h:320,rad:42,op:0.12,blur:0, g:["rgba(181,155,255,.18)","rgba(124,243,255,.08)"]},
+        {x:44,y:44,w:940,h:420,rad:50,op:0.07,blur:0, g:["rgba(255,255,255,.10)","rgba(255,255,255,0)"]},
+        {x:84,y:14,w:280,h:150,rad:26,op:0.10,blur:0, g:["rgba(124,243,255,.16)","rgba(255,179,214,.08)"]},
+      ],
+    ];
+
+    function applyShape(el, cfg, mouseAmt){
+      el.style.opacity = cfg.op.toFixed(3);
+      el.style.borderRadius = cfg.rad + "px";
+      el.style.filter = `blur(${cfg.blur}px)`;
+      el.style.background = `linear-gradient(135deg, ${cfg.g[0]}, ${cfg.g[1]})`;
+
+      // parallax
+      const dx = mx * mouseAmt;
+      const dy = my * mouseAmt;
+
+      el.style.left = cfg.x + "%";
+      el.style.top = cfg.y + "%";
+      el.style.width = cfg.w + "px";
+      el.style.height = cfg.h + "px";
+
+      el.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1)`;
+      // keep them visible after first reveal
+      if (el.style.opacity === "0") el.style.opacity = "0.001";
+    }
+
+    function pickScene(){
+      const vh = window.innerHeight || 1;
+      const center = vh * 0.55;
+
+      let bestIdx = 0, bestDist = Infinity;
+      sections.forEach((sec) => {
+        const i = parseInt(sec.dataset.scene, 10);
+        const r = sec.getBoundingClientRect();
+        const mid = r.top + r.height * 0.5;
+        const d = Math.abs(mid - center);
+        if (d < bestDist){ bestDist = d; bestIdx = i; }
+      });
+
+      const curSec = sections.find(s => parseInt(s.dataset.scene,10) === bestIdx) || sections[0];
+      const r = curSec.getBoundingClientRect();
+      const start = r.height * 0.65;
+      const inside = clamp(-r.top, 0, r.height);
+      const t = clamp((inside - start) / Math.max(1, (r.height - start)), 0, 1);
+
+      return { i: bestIdx, t };
+    }
+
+    function interpCfg(a,b,t){
+      // linear interpolate core geometry; keep gradients swapped mid-way for clean transitions
+      return {
+        x: lerp(a.x,b.x,t), y: lerp(a.y,b.y,t),
+        w: lerp(a.w,b.w,t), h: lerp(a.h,b.h,t),
+        rad: lerp(a.rad,b.rad,t),
+        op: lerp(a.op,b.op,t),
+        blur: lerp(a.blur,b.blur,t),
+        g: (t < 0.5 ? a.g : b.g)
+      };
+    }
+
+    function updateBackground(){
+      if (reduceMotion) return;
+
+      const { i, t } = pickScene();
+      const cur = SCENES[i] || SCENES[0];
+      const nxt = SCENES[Math.min(i+1, SCENES.length-1)] || cur;
+
+      // video only for scene 0
+      bgVideo.style.opacity = (i === 0 && t < 0.92) ? "1" : "0";
+
+      // shapes visible mostly after scene 0
+      for (let k=0; k<shapes.length; k++){
+        const cfg = interpCfg(cur[k], nxt[k], t);
+        // slightly stronger parallax for nearer shapes
+        const mouseAmt = 18 - k*2.4;
+        applyShape(shapes[k], cfg, mouseAmt);
+      }
+
+      // if scene is 0 (about), keep shapes very subtle
+      if (i === 0){
+        shapes.forEach((el, idx) => {
+          el.style.opacity = String(Math.min(parseFloat(el.style.opacity || "0"), 0.10));
+        });
+      } else {
+        shapes.forEach((el) => {
+          const op = parseFloat(el.style.opacity || "0");
+          el.style.opacity = String(Math.max(op, 0.08)); // ensure visible
+        });
+      }
+    }
+
+    let ticking = false;
+    function onScroll(){
+      if (reduceMotion) return;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateBackground();
+        ticking = false;
+      });
+    }
+
+    function raf(){
+      if (!reduceMotion) updateBackground();
+      requestAnimationFrame(raf);
+    }
+    raf();
+    updateBackground();
+    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("resize", onScroll);
+
+    // =========================================
     // Custom cursor + colored dot trail
+    // =========================================
     const cursor = document.getElementById("cursor");
     const trailCount = 18;
     const dots = [];
@@ -546,12 +758,10 @@
     let showCursor = false;
 
     function colorAt(i){
-      // cycle between accent colors
       const t = i / (trailCount - 1);
-      // simple mix by choosing stops
-      if (t < 0.33) return "rgba(124,243,255,.85)";      // cyan
-      if (t < 0.66) return "rgba(181,155,255,.85)";      // purple
-      return "rgba(255,179,214,.85)";                    // pink
+      if (t < 0.33) return "rgba(124,243,255,.90)";
+      if (t < 0.66) return "rgba(181,155,255,.90)";
+      return "rgba(255,179,214,.90)";
     }
 
     if (!reduceMotion){
@@ -561,7 +771,7 @@
         d.style.background = colorAt(i);
         d.style.width = (7 - i*0.18) + "px";
         d.style.height = (7 - i*0.18) + "px";
-        d.style.opacity = String(0.0);
+        d.style.opacity = "0";
         document.body.appendChild(d);
         dots.push({ el:d, x:mouseX, y:mouseY });
       }
@@ -583,20 +793,15 @@
       });
 
       function animateTrail(){
-        // cursor follows mouse
         cursor.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
 
-        // dots chase previous dot
         let x = mouseX, y = mouseY;
         for (let i=0; i<dots.length; i++){
           const o = dots[i];
-          // smoothing
           o.x += (x - o.x) * 0.22;
           o.y += (y - o.y) * 0.22;
           o.el.style.transform = `translate(${o.x}px, ${o.y}px) translate(-50%, -50%)`;
-          // next target is this dot's position
-          x = o.x;
-          y = o.y;
+          x = o.x; y = o.y;
         }
         requestAnimationFrame(animateTrail);
       }
