@@ -6,7 +6,7 @@
   <title>Malak Imbaby — AI Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
   <style>
 :root{
   --bg:#060414;--ink:rgba(255,255,255,.92);--mut:rgba(255,255,255,.58);
@@ -45,7 +45,7 @@ a{color:inherit;text-decoration:none}strong{font-weight:600}
 .ey-pip{width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--sk));box-shadow:0 0 10px rgba(124,91,255,.60);animation:pip 2.4s ease-in-out infinite}
 @keyframes pip{0%,100%{opacity:1}50%{opacity:.28}}
 .hero-name{font-size:clamp(52px,8vw,104px);font-weight:700;line-height:.92;letter-spacing:-.04em;margin-bottom:18px;font-family:'DM Sans',sans-serif}
-.hero-name .dw{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,8vw,104px);background:linear-gradient(115deg,var(--v) 0%,var(--sk) 42%,var(--li) 72%,var(--pk) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:gs 7s ease-in-out infinite alternate}
+.hero-name .dw{font-family:'Playfair Display',serif;font-weight:900;font-style:italic;font-size:clamp(56px,8.5vw,112px);background:linear-gradient(115deg,var(--v) 0%,var(--sk) 42%,var(--li) 72%,var(--pk) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:gs 7s ease-in-out infinite alternate;letter-spacing:-.02em;text-shadow:none;filter:drop-shadow(0 0 40px rgba(124,91,255,.35))}
 @keyframes gs{from{background-position:0%}to{background-position:100%}}
 .hero-role{font-size:clamp(15px,1.6vw,20px);color:var(--mut);font-weight:300;letter-spacing:.01em;margin-bottom:18px}
 .hero-body{color:var(--mut);font-size:15.5px;line-height:1.78;max-width:56ch;margin-bottom:32px;font-weight:300}
@@ -222,6 +222,40 @@ main{position:relative;z-index:20}
 
 footer{position:relative;z-index:22;padding:26px clamp(28px,6.5vw,100px);border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--dim);background:rgba(6,4,20,.96)}
 
+/* ══ CUSTOM CURSOR ══ */
+body{cursor:none}
+#cursor-dot{
+  position:fixed;width:8px;height:8px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,rgba(124,91,255,0.9) 60%,transparent 100%);
+  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  mix-blend-mode:screen;transition:width .15s,height .15s,opacity .15s;
+  box-shadow:0 0 10px rgba(124,91,255,.8),0 0 20px rgba(124,243,255,.4);
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(124,91,255,.55);
+  pointer-events:none;z-index:9998;transform:translate(-50%,-50%);
+  transition:width .25s cubic-bezier(.16,1,.3,1),height .25s cubic-bezier(.16,1,.3,1),border-color .25s,opacity .2s;
+  box-shadow:0 0 0 0 rgba(124,91,255,.0);
+}
+#cursor-ring.hovered{
+  width:56px;height:56px;
+  border-color:rgba(124,243,255,.7);
+  box-shadow:0 0 22px rgba(124,91,255,.28),inset 0 0 12px rgba(124,243,255,.06);
+}
+#cursor-ring.clicked{
+  width:24px;height:24px;
+  border-color:rgba(255,157,226,.9);
+  transition:width .08s,height .08s,border-color .08s;
+}
+#cursor-trail-canvas{
+  position:fixed;inset:0;pointer-events:none;z-index:9997;
+}
+@media(max-width:960px){
+  body{cursor:auto}
+  #cursor-dot,#cursor-ring,#cursor-trail-canvas{display:none}
+}
+
 /* ══ MAGNETIC CONTACT SECTION ══ */
 #contact{position:relative;overflow:hidden}
 #ct-mag-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.65;z-index:0}
@@ -243,7 +277,10 @@ footer{position:relative;z-index:22;padding:26px clamp(28px,6.5vw,100px);border-
 </head>
 <body>
 
-<div id="cosmos" aria-hidden="true">
+<!-- CUSTOM CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<canvas id="cursor-trail-canvas"></canvas>
   <canvas id="mesh-c"></canvas>
 </div>
 <!-- bird overlay canvas removed, birds on single canvas -->
@@ -440,9 +477,9 @@ footer{position:relative;z-index:22;padding:26px clamp(28px,6.5vw,100px);border-
           </div>
         </div>
         <div class="ct-links ur">
-          <a class="ct-lnk" href="/cdn-cgi/l/email-protection#8ae7ebe6ebe1a4e2e5f9f9ebe7a4fde5f8e1caede7ebe3e6a4e9e5e7">
+          <a class="ct-lnk" href="mailto:malak.hossam.work@gmail.com">
             <span class="ct-lnk-ico"><svg viewBox="0 0 24 24" fill="none" stroke="url(#eg)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7c5bff"/><stop offset="100%" stop-color="#b59bff"/></linearGradient></defs><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg></span>
-            <div class="ct-lnk-text"><span class="ct-lnk-k">Email</span><span class="ct-lnk-v"><span class="__cf_email__" data-cfemail="234e424f42480d4b4c5050424e0d544c514863444e424a4f0d404c4e">[email&#160;protected]</span></span></div>
+            <div class="ct-lnk-text"><span class="ct-lnk-k">Email</span><span class="ct-lnk-v">malak.hossam.work@gmail.com</span></div>
             <span class="ct-lnk-arr">→</span>
           </a>
           <a class="ct-lnk" href="tel:+201204073624">
@@ -471,7 +508,7 @@ footer{position:relative;z-index:22;padding:26px clamp(28px,6.5vw,100px);border-
   <a class="chip" style="cursor:pointer" href="#about">↑ Top</a>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 (function(){
 'use strict';
 document.getElementById('yr').textContent = new Date().getFullYear();
@@ -752,6 +789,102 @@ onScroll();
   resize();
   addEventListener('resize', resize);
   drawFrame();
+})();
+
+/* ══ CUSTOM CURSOR ══ */
+(function(){
+  if(isMob) return;
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  const trailCanvas = document.getElementById('cursor-trail-canvas');
+  if(!dot || !ring || !trailCanvas) return;
+
+  const ctx = trailCanvas.getContext('2d');
+  let W, H;
+  function resizeTrail(){ W = trailCanvas.width = innerWidth; H = trailCanvas.height = innerHeight; }
+  resizeTrail();
+  addEventListener('resize', resizeTrail);
+
+  let mx=innerWidth/2, my=innerHeight/2;
+  let rx=innerWidth/2, ry=innerHeight/2;
+  let isHovered=false, isClicked=false;
+
+  // Trail particles
+  const MAX_TRAIL = 28;
+  const trail = [];
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    // Add trail point
+    trail.push({ x: mx, y: my, age: 0, r: 2.5 + Math.random()*1.5,
+      hue: 220 + Math.random()*60 });
+    if(trail.length > MAX_TRAIL) trail.shift();
+  }, {passive:true});
+
+  document.addEventListener('mousedown', () => {
+    isClicked = true;
+    ring.classList.add('clicked');
+    setTimeout(() => { isClicked=false; ring.classList.remove('clicked'); }, 150);
+  });
+
+  // Hover detection for interactive elements
+  document.querySelectorAll('a,button,.card,.kcard,.ct-lnk,.btn,.ts-item,.exp-card,.tl-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { isHovered=true; ring.classList.add('hovered'); });
+    el.addEventListener('mouseleave', () => { isHovered=false; ring.classList.remove('hovered'); });
+  });
+
+  let animFrame;
+  function animate(){
+    // Move dot instantly
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+
+    // Lag ring behind
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+
+    // Draw comet trail
+    ctx.clearRect(0, 0, W, H);
+
+    for(let i = trail.length - 1; i >= 0; i--){
+      const p = trail[i];
+      p.age++;
+      const lifeRatio = 1 - (p.age / MAX_TRAIL);
+      if(lifeRatio <= 0){ trail.splice(i,1); continue; }
+
+      const alpha = lifeRatio * 0.55;
+      const radius = p.r * lifeRatio;
+
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius * 3);
+      grad.addColorStop(0, `hsla(${p.hue},90%,75%,${alpha})`);
+      grad.addColorStop(0.5, `hsla(${p.hue+30},80%,60%,${alpha*0.5})`);
+      grad.addColorStop(1, `hsla(${p.hue+60},70%,50%,0)`);
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radius * 3, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    // Connect trail dots with glowing line
+    if(trail.length > 2){
+      ctx.beginPath();
+      ctx.moveTo(trail[0].x, trail[0].y);
+      for(let i = 1; i < trail.length; i++){
+        const p0 = trail[i-1], p1 = trail[i];
+        ctx.lineTo(p1.x, p1.y);
+      }
+      ctx.strokeStyle = 'rgba(124,91,255,0.18)';
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    animFrame = requestAnimationFrame(animate);
+  }
+  animate();
 })();
 
 })();
