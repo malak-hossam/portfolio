@@ -250,6 +250,7 @@ body{cursor:none}
 }
 #cursor-trail-canvas{
   position:fixed;inset:0;pointer-events:none;z-index:9997;
+  background:transparent;
 }
 @media(max-width:960px){
   body{cursor:auto}
@@ -281,6 +282,8 @@ body{cursor:none}
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 <canvas id="cursor-trail-canvas"></canvas>
+
+<div id="cosmos" aria-hidden="true">
   <canvas id="mesh-c"></canvas>
 </div>
 <!-- bird overlay canvas removed, birds on single canvas -->
