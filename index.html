@@ -113,46 +113,45 @@ main{position:relative;z-index:20}
 /* ══ PIXEL CHARACTER ══ */
 #pixel-char-wrapper{
   position:fixed;
-  right:clamp(20px,3vw,60px);
+  right:clamp(16px,2.5vw,48px);
   bottom:0;
   z-index:50;
   pointer-events:none;
-  transition:opacity .5s ease, right 0.9s cubic-bezier(.16,1,.3,1), left 0.9s cubic-bezier(.16,1,.3,1);
-  will-change:transform, left, right;
+  transition:opacity .5s ease, right 1.0s cubic-bezier(.16,1,.3,1), left 1.0s cubic-bezier(.16,1,.3,1);
+  will-change:left, right;
 }
 #pixel-char-wrapper.hidden{opacity:0}
 #pixel-char-wrapper.char-left{
   right:auto;
-  left:clamp(20px,3vw,60px);
+  left:clamp(16px,2.5vw,48px);
 }
 #pixel-char-canvas{
   display:block;
-  width:180px;
-  height:320px;
+  width:160px;
+  height:280px;
   image-rendering:pixelated;
   image-rendering:crisp-edges;
 }
 /* speech bubble */
 #pixel-bubble{
   position:absolute;
-  bottom:330px;
+  bottom:288px;
   right:0;
-  background:rgba(6,4,20,.92);
+  background:rgba(6,4,20,.95);
   border:2px solid var(--pixel);
   border-radius:10px 10px 0 10px;
   padding:8px 12px;
   font-family:'Press Start 2P',monospace;
   font-size:7px;
   color:var(--pixel);
-  white-space:nowrap;
   opacity:0;
   transform:scale(.8) translateY(8px);
   transform-origin:bottom right;
   transition:opacity .35s,transform .35s;
   pointer-events:none;
-  line-height:1.8;
-  max-width:200px;
-  white-space:normal;
+  line-height:1.9;
+  max-width:190px;
+  white-space:pre-line;
 }
 #pixel-char-wrapper.char-left #pixel-bubble{
   right:auto;
@@ -198,9 +197,10 @@ main{position:relative;z-index:20}
 .kcard{flex:1;height:350px;border-radius:var(--r);border:1px solid var(--cbdr);background:var(--cbg);backdrop-filter:blur(12px);display:flex;flex-direction:column;overflow:visible;position:relative;cursor:pointer;transition:transform .38s cubic-bezier(.16,1,.3,1),border-color .38s,background .38s,box-shadow .38s,flex .38s,height .38s cubic-bezier(.16,1,.3,1)}
 .kcard:hover,.kcard.kactive{transform:translateY(-26px);height:390px;flex:1.20;border-color:rgba(124,91,255,.44);background:rgba(124,91,255,.09);box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 0 1px rgba(124,91,255,.20),0 0 50px rgba(124,91,255,.16)}
 .krow.has-active .kcard:not(:hover):not(.kactive){opacity:.60;transform:translateY(5px);flex:.87}
-.kcard-art{flex:0 0 175px;border-radius:calc(var(--r) - 1px) calc(var(--r) - 1px) 0 0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;overflow:visible}
-.kblob{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;z-index:2;transition:transform .38s cubic-bezier(.16,1,.3,1),box-shadow .38s}
-.kcard:hover .kblob,.kcard.kactive .kblob{transform:translateY(-20px) scale(1.10)}
+.kcard-art{flex:0 0 160px;border-radius:calc(var(--r) - 1px) calc(var(--r) - 1px) 0 0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.kblob{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;transition:transform .38s cubic-bezier(.16,1,.3,1);border-radius:0}
+.kblob svg{width:72px;height:72px;transition:transform .38s cubic-bezier(.16,1,.3,1)}
+.kcard:hover .kblob svg,.kcard.kactive .kblob svg{transform:scale(1.12) translateY(-4px)}
 .kcard-body{flex:1;padding:14px 16px 16px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;justify-content:space-between}
 .kcard-n{font-size:10px;font-weight:500;letter-spacing:.16em;color:var(--dim);margin-bottom:5px}
 .kcard-t{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.28;margin-bottom:6px}
@@ -309,7 +309,7 @@ body{cursor:none}
 <!-- PIXEL CHARACTER (Hijabi girl) -->
 <div id="pixel-char-wrapper">
   <div id="pixel-bubble"></div>
-  <canvas id="pixel-char-canvas" width="180" height="320"></canvas>
+  <canvas id="pixel-char-canvas" width="160" height="280"></canvas>
 </div>
 
 <!-- HERO FIXED -->
@@ -389,13 +389,13 @@ body{cursor:none}
           <button class="karr karr-l" id="karr-l">&#8592;</button>
           <button class="karr karr-r" id="karr-r">&#8594;</button>
           <div class="krow" id="krow">
-            <div class="kcard up d1"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(124,243,255,.22),rgba(124,91,255,.42) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(124,91,255,.38)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="14" width="40" height="28" rx="4" stroke="#7CF3FF" stroke-width="2" fill="none"/><rect x="14" y="20" width="28" height="16" rx="2" fill="rgba(124,243,255,0.12)" stroke="#7CF3FF" stroke-width="1.2"/><circle cx="28" cy="28" r="5" fill="none" stroke="#b59bff" stroke-width="1.8"/><circle cx="28" cy="28" r="2" fill="#7CF3FF"/><line x1="33" y1="23" x2="38" y2="18" stroke="#7CF3FF" stroke-width="1.5" stroke-linecap="round"/><circle cx="40" cy="16" r="3" fill="#7c5bff" opacity="0.8"/><line x1="20" y1="42" x2="36" y2="42" stroke="#7CF3FF" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="42" x2="28" y2="46" stroke="#7CF3FF" stroke-width="2"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">01</div><div class="kcard-t">VLM Desktop Automation</div><div class="kcard-d">UGround VLM grounding GUI elements with GPU inference and optional vLLM backend.</div><div class="ktags"><span class="ktag">VLM</span><span class="ktag">GPU</span><span class="ktag">vLLM</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/automation-desktop" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d2"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(255,157,226,.22),rgba(181,155,255,.42) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(181,155,255,.38)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="18" width="36" height="24" rx="3" stroke="#ff9de2" stroke-width="2" fill="rgba(255,157,226,0.08)"/><text x="28" y="34" text-anchor="middle" font-family="serif" font-size="14" fill="#ff9de2" opacity="0.9">ع</text><line x1="10" y1="26" x2="46" y2="26" stroke="#ff9de2" stroke-width="1" opacity="0.4"/><circle cx="14" cy="22" r="1.5" fill="#ff9de2" opacity="0.6"/><circle cx="19" cy="22" r="1.5" fill="#ff9de2" opacity="0.4"/><circle cx="24" cy="22" r="1.5" fill="#ff9de2" opacity="0.3"/><path d="M16 38 Q28 44 40 38" stroke="#b59bff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">02</div><div class="kcard-t">Lexical Analysis Agent</div><div class="kcard-d">Arabic microservice — FastAPI + SQLite + LLM fallback. Reduced lookup latency by <strong>40%</strong>.</div><div class="ktags"><span class="ktag">FastAPI</span><span class="ktag">SQLite</span><span class="ktag">Arabic NLP</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/arabic-lexical-analysis-agent" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d3"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(93,228,199,.22),rgba(124,243,255,.42) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(124,243,255,.36)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="28" cy="22" r="10" stroke="#7CF3FF" stroke-width="2" fill="rgba(124,243,255,0.08)"/><path d="M22 28 L28 14 L34 28" stroke="#7CF3FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="22" r="3" fill="#7CF3FF" opacity="0.7"/><path d="M18 32 L28 44 L38 32" stroke="#5de4c7" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="28" y1="28" x2="28" y2="32" stroke="#7CF3FF" stroke-width="1.5"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">03</div><div class="kcard-t">Arabic Morphology (AraBART)</div><div class="kcard-d">Fine-tuned on MASAQ with CAMeL Tools. Achieved <strong>~82% accuracy</strong> on Arabic morphology.</div><div class="ktags"><span class="ktag">AraBART</span><span class="ktag">CAMeL</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/arabic-morphology-arabart" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d4"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(255,200,100,.18),rgba(255,120,60,.38) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(255,120,60,.32)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20 Q12 14 18 14 L38 14 Q44 14 44 20 L44 32 Q44 38 38 38 L30 38 L24 44 L24 38 L18 38 Q12 38 12 32 Z" stroke="#ffb86c" stroke-width="2" fill="rgba(255,184,108,0.08)"/><circle cx="22" cy="26" r="2.5" fill="#ffb86c" opacity="0.8"/><circle cx="28" cy="26" r="2.5" fill="#ffb86c"/><circle cx="34" cy="26" r="2.5" fill="#ffb86c" opacity="0.8"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">04</div><div class="kcard-t">Arabic Chatbot (Gemini + LangChain)</div><div class="kcard-d">Intent-aware chatbot with memory + morphology/lexical microservices for Arabic Q&A.</div><div class="ktags"><span class="ktag">LLMs</span><span class="ktag">LangChain</span><span class="ktag">Memory</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Arabic-chatbot" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d1"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(200,140,255,.22),rgba(100,60,220,.42) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(120,70,220,.36)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="28" cy="22" rx="10" ry="12" stroke="#b59bff" stroke-width="2" fill="rgba(181,155,255,0.1)"/><circle cx="28" cy="22" r="4" fill="none" stroke="#b59bff" stroke-width="1.5"/><path d="M18 34 Q28 44 38 34" stroke="#b59bff" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="28" y1="34" x2="28" y2="38" stroke="#b59bff" stroke-width="1.5"/><line x1="16" y1="16" x2="10" y2="12" stroke="#b59bff" stroke-width="1.5" stroke-linecap="round"/><line x1="40" y1="16" x2="46" y2="12" stroke="#b59bff" stroke-width="1.5" stroke-linecap="round"/><line x1="28" y1="10" x2="28" y2="6" stroke="#b59bff" stroke-width="1.5" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">05</div><div class="kcard-t">Butterfly Classification</div><div class="kcard-d">Custom CNN ~75% → fine-tuned ResNet to <strong>94%</strong> using PyTorch + OpenCV.</div><div class="ktags"><span class="ktag">ResNet</span><span class="ktag">PyTorch</span><span class="ktag">OpenCV</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Butterfly-Image-Classification" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d2"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(100,200,255,.20),rgba(60,130,220,.40) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(80,170,255,.32)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 36 L18 26 L24 30 L30 18 L36 28 L42 20 L48 36 Z" stroke="#7CF3FF" stroke-width="2" fill="rgba(124,243,255,0.1)" stroke-linejoin="round"/><line x1="10" y1="36" x2="48" y2="36" stroke="#7CF3FF" stroke-width="1" opacity="0.4"/><circle cx="30" cy="18" r="3" fill="#7CF3FF" opacity="0.8"/><line x1="28" y1="8" x2="28" y2="14" stroke="#7CF3FF" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="10" x2="24" y2="14" stroke="#7CF3FF" stroke-width="1.5" stroke-linecap="round"/><line x1="34" y1="10" x2="32" y2="14" stroke="#7CF3FF" stroke-width="1.5" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">06</div><div class="kcard-t">Weather Prediction (LSTM)</div><div class="kcard-d">Time-series LSTM forecasting that reduced MAE by <strong>12%</strong>.</div><div class="ktags"><span class="ktag">Time Series</span><span class="ktag">LSTM</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Weather-Prediction-LSTM" target="_blank" rel="noopener">GitHub →</a></div></div>
-            <div class="kcard up d3"><div class="kcard-art"><div class="kblob" style="background:radial-gradient(ellipse at 38% 35%,rgba(255,100,100,.18),rgba(220,60,60,.38) 55%,rgba(6,4,20,.18) 100%);box-shadow:0 8px 38px rgba(220,60,60,.30)"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="28" cy="24" rx="16" ry="14" stroke="#ff7070" stroke-width="2" fill="rgba(255,100,100,0.08)"/><circle cx="22" cy="22" r="3" fill="none" stroke="#ff7070" stroke-width="1.5"/><circle cx="34" cy="22" r="3" fill="none" stroke="#ff7070" stroke-width="1.5"/><path d="M20 30 Q28 36 36 30" stroke="#ff7070" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="28" y1="10" x2="28" y2="6" stroke="#ff7070" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="11" x2="20" y2="7" stroke="#ff7070" stroke-width="1.5" stroke-linecap="round"/><line x1="34" y1="11" x2="36" y2="7" stroke="#ff7070" stroke-width="1.5" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">07</div><div class="kcard-t">Arabic Sentiment (BERT & LSTM)</div><div class="kcard-d">Fine-tuned BERT + LSTM for Arabic sentiment analysis. Achieved <strong>85% accuracy</strong>.</div><div class="ktags"><span class="ktag">BERT</span><span class="ktag">LSTM</span><span class="ktag">Arabic</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/text-classification" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d1"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(10,8,40,1) 0%,rgba(30,20,80,1) 40%,rgba(15,35,70,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="18" width="52" height="36" rx="5" stroke="#7CF3FF" stroke-width="2" fill="rgba(124,243,255,0.06)"/><rect x="18" y="26" width="36" height="20" rx="3" fill="rgba(124,243,255,0.1)" stroke="#7CF3FF" stroke-width="1.2"/><circle cx="36" cy="36" r="6" fill="none" stroke="#b59bff" stroke-width="2"/><circle cx="36" cy="36" r="2.5" fill="#7CF3FF"/><line x1="42" y1="30" x2="49" y2="23" stroke="#7CF3FF" stroke-width="1.8" stroke-linecap="round"/><circle cx="51" cy="21" r="3.5" fill="#7c5bff"/><line x1="26" y1="54" x2="46" y2="54" stroke="#7CF3FF" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="54" x2="36" y2="60" stroke="#7CF3FF" stroke-width="2.5"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">01</div><div class="kcard-t">VLM Desktop Automation</div><div class="kcard-d">UGround VLM grounding GUI elements with GPU inference and optional vLLM backend.</div><div class="ktags"><span class="ktag">VLM</span><span class="ktag">GPU</span><span class="ktag">vLLM</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/automation-desktop" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d2"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(40,8,40,1) 0%,rgba(70,20,70,1) 40%,rgba(30,10,50,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="22" width="48" height="30" rx="4" stroke="#ff9de2" stroke-width="2" fill="rgba(255,157,226,0.06)"/><line x1="12" y1="32" x2="60" y2="32" stroke="#ff9de2" stroke-width="1" opacity="0.35"/><circle cx="19" cy="27" r="2" fill="#ff9de2" opacity="0.7"/><circle cx="26" cy="27" r="2" fill="#ff9de2" opacity="0.5"/><circle cx="33" cy="27" r="2" fill="#ff9de2" opacity="0.35"/><text x="36" y="52" text-anchor="middle" font-family="serif" font-size="18" fill="#ff9de2" opacity="0.95">ع</text><line x1="20" y1="40" x2="52" y2="40" stroke="#ff9de2" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/><line x1="20" y1="46" x2="42" y2="46" stroke="#ff9de2" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">02</div><div class="kcard-t">Lexical Analysis Agent</div><div class="kcard-d">Arabic microservice — FastAPI + SQLite + LLM fallback. Reduced lookup latency by <strong>40%</strong>.</div><div class="ktags"><span class="ktag">FastAPI</span><span class="ktag">SQLite</span><span class="ktag">Arabic NLP</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/arabic-lexical-analysis-agent" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d3"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(5,30,35,1) 0%,rgba(10,55,55,1) 40%,rgba(8,40,45,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="36" cy="28" r="13" stroke="#7CF3FF" stroke-width="2" fill="rgba(124,243,255,0.07)"/><path d="M28 36 L36 16 L44 36" stroke="#7CF3FF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="28" r="4" fill="#7CF3FF" opacity="0.8"/><path d="M22 44 L36 58 L50 44" stroke="#5de4c7" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="36" y1="38" x2="36" y2="44" stroke="#7CF3FF" stroke-width="2"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">03</div><div class="kcard-t">Arabic Morphology (AraBART)</div><div class="kcard-d">Fine-tuned on MASAQ with CAMeL Tools. Achieved <strong>~82% accuracy</strong> on Arabic morphology.</div><div class="ktags"><span class="ktag">AraBART</span><span class="ktag">CAMeL</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/arabic-morphology-arabart" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d4"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(35,20,5,1) 0%,rgba(65,35,10,1) 40%,rgba(45,25,8,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 24 Q14 16 22 16 L50 16 Q58 16 58 24 L58 40 Q58 48 50 48 L40 48 L32 56 L32 48 L22 48 Q14 48 14 40 Z" stroke="#ffb86c" stroke-width="2" fill="rgba(255,184,108,0.07)"/><circle cx="26" cy="32" r="3.5" fill="#ffb86c" opacity="0.8"/><circle cx="36" cy="32" r="3.5" fill="#ffb86c"/><circle cx="46" cy="32" r="3.5" fill="#ffb86c" opacity="0.8"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">04</div><div class="kcard-t">Arabic Chatbot (Gemini + LangChain)</div><div class="kcard-d">Intent-aware chatbot with memory + morphology/lexical microservices for Arabic Q&A.</div><div class="ktags"><span class="ktag">LLMs</span><span class="ktag">LangChain</span><span class="ktag">Memory</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Arabic-chatbot" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d1"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(20,8,45,1) 0%,rgba(45,15,90,1) 40%,rgba(30,10,60,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="36" cy="28" rx="13" ry="16" stroke="#b59bff" stroke-width="2" fill="rgba(181,155,255,0.07)"/><circle cx="36" cy="28" r="5" fill="none" stroke="#b59bff" stroke-width="1.8"/><path d="M22 44 Q36 56 50 44" stroke="#b59bff" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="36" y1="44" x2="36" y2="50" stroke="#b59bff" stroke-width="2"/><line x1="20" y1="20" x2="12" y2="14" stroke="#b59bff" stroke-width="1.8" stroke-linecap="round"/><line x1="52" y1="20" x2="60" y2="14" stroke="#b59bff" stroke-width="1.8" stroke-linecap="round"/><line x1="36" y1="12" x2="36" y2="6" stroke="#b59bff" stroke-width="1.8" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">05</div><div class="kcard-t">Butterfly Classification</div><div class="kcard-d">Custom CNN ~75% → fine-tuned ResNet to <strong>94%</strong> using PyTorch + OpenCV.</div><div class="ktags"><span class="ktag">ResNet</span><span class="ktag">PyTorch</span><span class="ktag">OpenCV</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Butterfly-Image-Classification" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d2"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(5,15,40,1) 0%,rgba(10,30,70,1) 40%,rgba(8,22,55,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="10,48 22,32 30,38 38,22 46,34 54,24 62,48" stroke="#7CF3FF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="10" y1="48" x2="62" y2="48" stroke="#7CF3FF" stroke-width="1.2" opacity="0.4"/><circle cx="38" cy="22" r="4" fill="#7CF3FF" opacity="0.85"/><line x1="36" y1="10" x2="36" y2="18" stroke="#7CF3FF" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="12" x2="30" y2="18" stroke="#7CF3FF" stroke-width="1.8" stroke-linecap="round"/><line x1="44" y1="12" x2="42" y2="18" stroke="#7CF3FF" stroke-width="1.8" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">06</div><div class="kcard-t">Weather Prediction (LSTM)</div><div class="kcard-d">Time-series LSTM forecasting that reduced MAE by <strong>12%</strong>.</div><div class="ktags"><span class="ktag">Time Series</span><span class="ktag">LSTM</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/Weather-Prediction-LSTM" target="_blank" rel="noopener">GitHub →</a></div></div>
+            <div class="kcard up d3"><div class="kcard-art" style="background:linear-gradient(135deg,rgba(35,5,5,1) 0%,rgba(65,10,10,1) 40%,rgba(45,8,8,1) 100%)"><div class="kblob"><svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="36" cy="32" rx="20" ry="18" stroke="#ff7070" stroke-width="2" fill="rgba(255,100,100,0.07)"/><circle cx="28" cy="28" r="4" fill="none" stroke="#ff7070" stroke-width="1.8"/><circle cx="44" cy="28" r="4" fill="none" stroke="#ff7070" stroke-width="1.8"/><path d="M24 40 Q36 48 48 40" stroke="#ff7070" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="36" y1="14" x2="36" y2="8" stroke="#ff7070" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="15" x2="25" y2="9" stroke="#ff7070" stroke-width="1.8" stroke-linecap="round"/><line x1="44" y1="15" x2="47" y2="9" stroke="#ff7070" stroke-width="1.8" stroke-linecap="round"/></svg></div></div><div class="kcard-body"><div><div class="kcard-n">07</div><div class="kcard-t">Arabic Sentiment (BERT & LSTM)</div><div class="kcard-d">Fine-tuned BERT + LSTM for Arabic sentiment analysis. Achieved <strong>85% accuracy</strong>.</div><div class="ktags"><span class="ktag">BERT</span><span class="ktag">LSTM</span><span class="ktag">Arabic</span></div></div><a class="kbtn" href="https://github.com/malak-hossam/text-classification" target="_blank" rel="noopener">GitHub →</a></div></div>
           </div>
         </div>
       </div>
@@ -406,7 +406,6 @@ body{cursor:none}
   <section class="sec panel" id="experience">
     <div class="sec-inner">
       <div class="exp-side">
-        <div class="pixel-badge up">✦ CAREER</div>
         <div class="lbl ul"><div class="lbl-bar" style="background:linear-gradient(180deg,var(--sk),var(--v))"></div><span>Experience</span></div>
         <p class="ul d2" style="font-size:14px;color:var(--mut);line-height:1.70;font-weight:300;max-width:32ch;margin-bottom:18px;margin-top:8px">Production work across LLM systems, RAG pipelines, microservices, and MLOps.</p>
         <div class="chips ul d3"><span class="chip">Realtime API</span><span class="chip">RAG</span><span class="chip">MLOps</span><span class="chip">Docker</span></div>
@@ -447,7 +446,6 @@ body{cursor:none}
   <!-- ══ TEACHING ══ -->
   <section class="sec panel" id="teaching">
     <div class="sec-inner">
-      <div class="pixel-badge up">✦ BEYOND CODE</div>
       <div class="lbl up"><div class="lbl-bar" style="background:linear-gradient(180deg,var(--pk),var(--li))"></div><span>Teaching &amp; Academic</span></div>
       <h2 class="sec-title up d1">Beyond the code —<br>teaching &amp; building teams</h2>
       <div class="teach-timeline">
@@ -484,7 +482,6 @@ body{cursor:none}
     <div class="sec-inner">
       <div class="ct-split">
         <div class="ul">
-          <div class="pixel-badge">✦ REACH OUT</div>
           <p class="ct-overline">Let's work together</p>
           <h2 class="ct-big">Open to AI engineering<br>roles &amp; freelance<br>projects.</h2>
           <p class="ct-tagline">If you need AI that behaves consistently in production — not just in a demo — I'm ready to talk.</p>
@@ -600,7 +597,7 @@ const gif = document.getElementById('hero-gif');
 const vov = document.getElementById('hov');
 gif.classList.add('on'); vov.classList.add('on');
 
-/* ══ PIXEL CHARACTER — Fashionable Tech Hijabi ══ */
+/* ══ PIXEL CHARACTER — Light-skin Fashionable Hijabi ══ */
 (function(){
   if(isMob) return;
 
@@ -609,343 +606,288 @@ gif.classList.add('on'); vov.classList.add('on');
   const ctx     = canvas.getContext('2d');
   const bubble  = document.getElementById('pixel-bubble');
 
-  const W = 180, H = 320;
-  canvas.width = W; canvas.height = H;
+  const CW = 180, CH = 320;
+  canvas.width = CW; canvas.height = CH;
 
-  // Section config — position + message + mood
   const SECTIONS = {
-    hero:       { side: 'right', msg: null,                    mood: 'idle',  pointing: false },
-    projects:   { side: 'left',  msg: "Check out\nmy work!",   mood: 'point', pointing: true  },
-    experience: { side: 'left',  msg: "Built in\nproduction.", mood: 'smile', pointing: true  },
-    teaching:   { side: 'left',  msg: "Teaching\nthe why.",    mood: 'happy', pointing: true  },
-    contact:    { side: 'right', msg: "Let's build\ntogether!", mood: 'wave',  pointing: false },
+    hero:       { side:'right', msg:null,                   mood:'idle',  pointing:false },
+    projects:   { side:'left',  msg:"Check out\nmy work!",  mood:'point', pointing:true  },
+    experience: { side:'left',  msg:"Built in\nproduction.",mood:'smile', pointing:true  },
+    teaching:   { side:'left',  msg:"Teaching\nthe why.",   mood:'happy', pointing:true  },
+    contact:    { side:'right', msg:"Let's build\ntogether!",mood:'wave', pointing:false },
   };
 
-  let currentMood    = 'idle';
-  let currentPointing = false;
-  let isRunning      = false;
-  let runFrame       = 0;
-  let runTimer       = 0;
+  let currentMood = 'idle', currentPointing = false;
+  let isRunning = false, runFrame = 0;
   let mouseX = 0, mouseY = 0;
   let eyeOffX = 0, eyeOffY = 0;
-  let bodyBob = 0, bodyBobDir = 1;
+  let bodyBobT = 0;
   let blinkTimer = 0, isBlinking = false;
   let frameCount = 0;
-  let armWave = 0, armWaving = false;
+  let armWaveT = 0, armWaving = false;
   let bubbleTimeout = null;
-  let isFacingLeft   = false; // hero is on right side facing left by default
+  let isFacingLeft = false;
+  let lastSection = 'hero';
 
-  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+  // Light skin palette — matches the pixel art reference
+  const C = {
+    skin:    '#F8D5B0',  // light peachy skin
+    skinDk:  '#E8B888',
+    skinSh:  '#D4956A',
+    hijab:   '#6B4AB8',  // deep violet hijab
+    hijabMd: '#8560D4',
+    hijabLt: '#A882EE',
+    tshirt:  '#0D1128',  // near-black shirt
+    tshirtL: '#1A2050',
+    jeans:   '#1E3A6E',  // deep blue jeans
+    jeansMd: '#2952A0',
+    jeansLt: '#3A6AC0',
+    shoe:    '#111111',
+    shoeStr: '#FF9DE2',  // pink stripe on sneaker
+    eye:     '#1A0A2E',
+    eyeWh:   '#FFFFFF',
+    lash:    '#0A0010',
+    blush:   '#F4A0B8',
+    aiCyan:  '#7CF3FF',
+    hand:    '#F8D5B0',
+    belt:    '#3A2010',
+    bkl:     '#C8A050',
+    earring: '#FFD700',
+  };
+
+  document.addEventListener('mousemove', e=>{mouseX=e.clientX;mouseY=e.clientY;},{passive:true});
 
   function getCurrentSection(){
-    const sy = window.scrollY, vh = window.innerHeight;
-    if(sy < vh * 0.7) return 'hero';
-    const secs = ['contact','teaching','experience','projects'];
-    for(const id of secs){
-      const el = document.getElementById(id);
-      if(el && el.getBoundingClientRect().top <= vh * 0.5) return id;
+    const sy=window.scrollY,vh=window.innerHeight;
+    if(sy<vh*0.7) return 'hero';
+    for(const id of ['contact','teaching','experience','projects']){
+      const el=document.getElementById(id);
+      if(el&&el.getBoundingClientRect().top<=vh*0.5) return id;
     }
     return 'projects';
   }
 
-  let lastSection = 'hero';
-
   function showBubble(text){
-    if(!text){ bubble.classList.remove('show'); return; }
-    bubble.textContent = text;
+    if(!text){bubble.classList.remove('show');return;}
+    bubble.textContent=text;
     bubble.classList.add('show');
     clearTimeout(bubbleTimeout);
-    bubbleTimeout = setTimeout(()=>{ bubble.classList.remove('show'); }, 4000);
+    bubbleTimeout=setTimeout(()=>bubble.classList.remove('show'),4200);
   }
 
   function onSectionChange(sec){
-    const data = SECTIONS[sec] || SECTIONS.hero;
-    const newSide = data.side;
-    const oldSide = SECTIONS[lastSection]?.side || 'right';
-
-    currentMood     = data.mood;
-    currentPointing = data.pointing;
-    if(data.mood === 'wave'){ armWaving = true; setTimeout(()=>{ armWaving=false; }, 2400); }
-
-    // Trigger run animation when moving to a different side
-    if(newSide !== oldSide){
-      isRunning = true; runTimer = 0;
-      // During run, face the direction of travel
-      isFacingLeft = (newSide === 'left');
-      wrapper.classList.toggle('char-left', newSide === 'left');
-      // After CSS transition (~900ms), settle facing
-      setTimeout(()=>{
-        isRunning = false;
-        isFacingLeft = (newSide === 'left');
-      }, 950);
+    const data=SECTIONS[sec]||SECTIONS.hero;
+    const newSide=data.side, oldSide=SECTIONS[lastSection]?.side||'right';
+    currentMood=data.mood; currentPointing=data.pointing;
+    if(data.mood==='wave'){armWaving=true;setTimeout(()=>armWaving=false,2600);}
+    if(newSide!==oldSide){
+      isRunning=true; runFrame=0;
+      isFacingLeft=(newSide==='left');
+      wrapper.classList.toggle('char-left',newSide==='left');
+      setTimeout(()=>{isRunning=false;},1100);
     } else {
-      isFacingLeft = (newSide === 'left');
-      wrapper.classList.toggle('char-left', newSide === 'left');
+      isFacingLeft=(newSide==='left');
+      wrapper.classList.toggle('char-left',newSide==='left');
     }
-
-    if(data.msg) setTimeout(()=>showBubble(data.msg), 500);
+    if(data.msg) setTimeout(()=>showBubble(data.msg),600);
     else bubble.classList.remove('show');
   }
 
-  // Color palette — fashionable tech hijabi
-  const C = {
-    skin:     '#F5C5A3',
-    skinDk:   '#DDA882',
-    skinSh:   '#C8906A',
-    hijab:    '#8B6BD4',   // lavender hijab
-    hijabDk:  '#6B4FB8',
-    hijabAcc: '#A88BEE',
-    tshirt:   '#1A1A2E',   // dark navy AI shirt
-    tshirtHL: '#252540',
-    jeans:    '#2C4A7A',   // tech blue jeans
-    jeansDk:  '#1E3560',
-    jeansHL:  '#3A6090',
-    shoe:     '#1A1A1A',
-    shoeAcc:  '#FF9DE2',   // pink sneaker accent
-    eye:      '#0A0520',
-    eyeWh:    '#FFFFFF',
-    liner:    '#1A0A3E',
-    blush:    '#FFB3C6',
-    aiGlow:   '#7CF3FF',
-    hand:     '#F5C5A3',
-    belt:     '#4A3020',
-    beltBkl:  '#C0A060',
-  };
+  // px helper — fills a pixel rect
+  function p(x,y,w,h,col){ctx.fillStyle=col;ctx.fillRect(x|0,y|0,w|0,h|0);}
 
-  function px(x,y,w,h,color){ ctx.fillStyle=color; ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h)); }
+  // ── RUN FRAMES: 6-frame spritesheet-style leg/arm positions ──
+  // Each frame: [leftLegY, rightLegY, leftArmAngle, rightArmAngle]
+  const RUN_FRAMES = [
+    [-8,  4, -0.5,  0.4],  // frame 0
+    [-4,  8,  -0.2, 0.6],  // frame 1
+    [ 0,  6,   0.1, 0.4],  // frame 2
+    [ 6,  0,   0.5,-0.2],  // frame 3
+    [ 8, -4,   0.4,-0.4],  // frame 4
+    [ 4, -8,   0.2,-0.6],  // frame 5
+  ];
 
-  function drawCharacter(bx, by, mood, eyeOX, eyeOY, blink, armAngle, runF, isLeft, pointing){
-    ctx.clearRect(0,0,W,H);
-
-    // Scale up 2x for crispier pixel art
-    const S = 2;
-    // All coords are in "pixel art units" (1 unit = 2 CSS px)
-    // Base position
-    const ox = bx/S, oy = by/S;
-
+  function drawChar(bobY, mood, eyeOX, eyeOY, blink, isLeft, pointing, runFr, runAnim, waveT){
+    ctx.clearRect(0,0,CW,CH);
     ctx.save();
-    ctx.scale(S, S);
+    ctx.scale(2,2);  // render at 2x internal resolution
 
-    // Running leg positions
-    let legL = 0, legR = 0;
-    if(isRunning){
-      legL = Math.sin(runF * 0.6) * 6;
-      legR = -Math.sin(runF * 0.6) * 6;
-    }
+    const W2=CW/2, H2=CH/2;
+    if(isLeft){ ctx.translate(W2,0); ctx.scale(-1,1); }
 
-    const flip = isLeft; // mirror if facing left
+    // ── coordinate origin: center-bottom of character ──
+    const cx=W2/2, cy=H2-8+bobY;
 
-    if(flip){
-      ctx.save();
-      ctx.translate(W/S, 0);
-      ctx.scale(-1, 1);
-    }
+    // pick run frame
+    const rf = runAnim ? RUN_FRAMES[runFr%6] : [0,0,0,0];
+    const [llY,rlY,laA,raA] = rf;
 
-    const bxS = 10, byS = Math.round(by/S);
+    // ─── LEGS ───
+    // Jeans (left leg)
+    ctx.save();
+    ctx.translate(cx-8, cy-46+llY);
+    ctx.rotate(runAnim ? laA*0.4 : 0);
+    p(0,0,13,38,C.jeans); p(1,0,11,38,C.jeansMd); p(2,2,8,2,C.jeansLt);
+    // shoe
+    p(-1,36,16,5,C.shoe); p(-1,36,16,2,C.shoeStr);
+    ctx.restore();
+    // Jeans (right leg)
+    ctx.save();
+    ctx.translate(cx+3, cy-46+rlY);
+    ctx.rotate(runAnim ? raA*0.4 : 0);
+    p(0,0,13,38,C.jeans); p(1,0,11,38,C.jeansMd); p(2,2,8,2,C.jeansLt);
+    p(-1,36,16,5,C.shoe); p(-1,36,16,2,C.shoeStr);
+    ctx.restore();
 
-    // ─── LEGS / JEANS ───
-    // Left leg
-    px(bxS+20, byS+88+legL, 14, 42, C.jeansDk);
-    px(bxS+22, byS+88+legL, 12, 40, C.jeans);
-    px(bxS+22, byS+90+legL, 10, 2, C.jeansHL);
-    // Right leg
-    px(bxS+36, byS+88+legR, 14, 42, C.jeansDk);
-    px(bxS+38, byS+88+legR, 12, 40, C.jeans);
-    px(bxS+38, byS+90+legR, 10, 2, C.jeansHL);
+    // belt
+    p(cx-12,cy-50,30,4,C.belt); p(cx+2,cy-51,6,6,C.bkl);
 
-    // Shoes
-    px(bxS+18, byS+128+legL, 16, 6, C.shoe);
-    px(bxS+18, byS+128+legL, 16, 2, C.shoeAcc);
-    px(bxS+34, byS+128+legR, 16, 6, C.shoe);
-    px(bxS+34, byS+128+legR, 16, 2, C.shoeAcc);
-
-    // Belt
-    px(bxS+20, byS+87, 32, 4, C.belt);
-    px(bxS+36, byS+86, 6, 5, C.beltBkl);
-
-    // ─── T-SHIRT BODY ───
-    px(bxS+18, byS+58, 36, 32, C.tshirt);
-    px(bxS+20, byS+58, 32, 4, C.tshirtHL);
-    // AI symbol on shirt (circuit-board style)
-    // "AI" text area
-    ctx.fillStyle = C.aiGlow;
-    ctx.globalAlpha = 0.85;
-    px(bxS+26, byS+68, 2, 10, C.aiGlow);  // A left
-    px(bxS+28, byS+68, 4, 2, C.aiGlow);    // A top
-    px(bxS+32, byS+68, 2, 10, C.aiGlow);  // A right
-    px(bxS+28, byS+73, 4, 2, C.aiGlow);    // A mid
-    px(bxS+38, byS+68, 2, 10, C.aiGlow);  // I
-    // Small circuit dots
-    ctx.globalAlpha = 0.55;
-    px(bxS+22, byS+72, 2, 2, C.aiGlow);
-    px(bxS+46, byS+72, 2, 2, C.aiGlow);
-    px(bxS+22, byS+76, 2, 2, C.aiGlow);
-    ctx.globalAlpha = 1.0;
-
-    // Neckline
-    px(bxS+28, byS+56, 16, 4, C.skin);
+    // ─── TORSO (t-shirt) ───
+    p(cx-14,cy-86,32,38,C.tshirt); p(cx-12,cy-86,28,5,C.tshirtL);
+    // AI glyph on shirt — glowing cyan
+    ctx.globalAlpha=0.9;
+    // "A"
+    p(cx-8,cy-76,2,10,C.aiCyan); p(cx-6,cy-76,4,2,C.aiCyan); p(cx-2,cy-76,2,10,C.aiCyan); p(cx-6,cy-71,4,2,C.aiCyan);
+    // "I"
+    p(cx+4,cy-76,2,10,C.aiCyan);
+    ctx.globalAlpha=0.45;
+    p(cx-12,cy-71,2,2,C.aiCyan); p(cx+10,cy-71,2,2,C.aiCyan); p(cx-12,cy-66,2,2,C.aiCyan);
+    ctx.globalAlpha=1;
+    // Neckline skin
+    p(cx-6,cy-88,16,5,C.skin);
 
     // ─── ARMS ───
-    // Right arm (pointing or idle or waving)
+    // Left arm
+    ctx.save();
+    ctx.translate(cx-15, cy-84);
+    const la = runAnim ? laA : 0;
+    ctx.rotate(la);
+    p(0,0,11,28,C.tshirt); p(1,25,9,6,C.hand);
+    ctx.restore();
+    // Right arm
+    ctx.save();
+    ctx.translate(cx+10, cy-84);
     if(pointing){
-      // Arm extended pointing right (towards text)
-      ctx.save();
-      ctx.translate(bxS+54, byS+62);
-      ctx.rotate(-0.35);
-      px(0, 0, 10, 28, C.tshirt);
-      px(8, 24, 8, 6, C.hand);
-      // Pointing finger extended
-      px(14, 20, 12, 4, C.hand);
-      px(24, 18, 4, 4, C.skin);
-      ctx.restore();
+      ctx.rotate(-0.45);
+      p(0,0,11,26,C.tshirt); p(8,22,9,5,C.hand);
+      // extended finger
+      p(14,18,14,4,C.hand); p(26,16,4,4,C.skin);
     } else if(armWaving){
-      ctx.save();
-      ctx.translate(bxS+54, byS+62);
-      const wRot = -0.7 + Math.sin(armAngle) * 0.5;
-      ctx.rotate(wRot);
-      px(0, 0, 10, 24, C.tshirt);
-      px(2, 22, 8, 6, C.hand);
-      ctx.restore();
+      const wr=-0.8+Math.sin(waveT)*0.55;
+      ctx.rotate(wr);
+      p(0,0,11,22,C.tshirt); p(2,20,9,6,C.hand);
     } else {
-      // Idle arm right
-      px(bxS+52, byS+60, 10, 28, C.tshirt);
-      px(bxS+52, byS+86, 8, 6, C.hand);
+      const ra=runAnim ? raA : 0;
+      ctx.rotate(ra);
+      p(0,0,11,28,C.tshirt); p(1,25,9,6,C.hand);
     }
-
-    // Left arm (idle, slight bob)
-    const lArmBob = isRunning ? Math.sin(runF*0.6) * 4 : 0;
-    px(bxS+8, byS+60+lArmBob, 12, 28, C.tshirt);
-    px(bxS+8, byS+86+lArmBob, 10, 6, C.hand);
+    ctx.restore();
 
     // ─── HEAD ───
-    const hx = bxS+14, hy = byS+10;
+    const hx=cx-20, hy=cy-152;
 
-    // Hijab (back layer/shadow)
-    px(hx-2, hy+2, 48, 52, C.hijabDk);
-    // Hijab main
-    px(hx, hy, 44, 50, C.hijab);
-    // Hijab highlight
-    px(hx+2, hy+2, 16, 4, C.hijabAcc);
+    // Hijab back shadow
+    p(hx-2,hy+2,46,56,C.hijab);
+    // Hijab main body
+    p(hx,hy,42,52,C.hijabMd);
+    // Hijab top highlight
+    p(hx+2,hy+2,18,5,C.hijabLt);
     // Hijab chest drape
-    px(hx, hy+44, 44, 14, C.hijabDk);
-    px(hx+2, hy+46, 40, 10, C.hijab);
-    px(hx+4, hy+50, 36, 6, C.hijabDk);
+    p(hx-2,hy+46,46,18,C.hijab);
+    p(hx,hy+48,42,14,C.hijabMd);
+    p(hx+2,hy+52,38,8,C.hijab);
 
-    // Face opening
-    px(hx+8, hy+8, 28, 30, C.skin);
-    // Face shading
-    px(hx+8, hy+8, 4, 30, C.skinDk);
-    px(hx+32, hy+8, 4, 30, C.skinDk);
-    px(hx+10, hy+34, 24, 4, C.skinDk);
+    // Face oval
+    p(hx+7,hy+8,28,32,C.skin);
+    // Face shadows (subtle sides)
+    p(hx+7,hy+8,4,32,C.skinDk);
+    p(hx+31,hy+8,4,32,C.skinDk);
+    p(hx+9,hy+36,24,4,C.skinDk);
+
+    // Earring glimpse
+    p(hx+36,hy+22,2,6,C.earring);
 
     // Blush
-    ctx.globalAlpha = 0.65;
-    px(hx+10, hy+24, 6, 4, C.blush);
-    px(hx+28, hy+24, 6, 4, C.blush);
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha=0.55;
+    p(hx+9,hy+25,7,5,C.blush);
+    p(hx+26,hy+25,7,5,C.blush);
+    ctx.globalAlpha=1;
 
-    // ─── EYELINER / EYES ───
-    const ex1 = hx+12, ex2 = hx+24, ey = hy+14;
-    // Eyeliner top
-    px(ex1, ey-1, 10, 2, C.liner);
-    px(ex1+8, ey-3, 4, 4, C.liner); // wing
-    px(ex2, ey-1, 10, 2, C.liner);
-    px(ex2-2, ey-3, 4, 4, C.liner);
-
-    const eClamp = (v,mn,mx)=>Math.max(mn,Math.min(mx,v));
-    const ox2 = eClamp(eyeOX,-2,2), oy2 = eClamp(eyeOY,-1,1);
-
+    // ─── EYES ───
+    const ex1=hx+11, ex2=hx+23, ey=hy+14;
+    // Upper lash / liner
+    p(ex1,ey-1,10,2,C.lash); p(ex1+8,ey-3,4,4,C.lash);  // wing
+    p(ex2,ey-1,10,2,C.lash); p(ex2-2,ey-3,4,4,C.lash);
+    const ec=(v,mn,mx)=>Math.max(mn,Math.min(mx,v));
+    const ox2=ec(eyeOX,-2,2), oy2=ec(eyeOY,-1,1);
     if(!blink){
-      px(ex1, ey, 8, 6, C.eyeWh);
-      px(ex2, ey, 8, 6, C.eyeWh);
-      px(ex1+2+ox2, ey+1+oy2, 4, 4, C.eye);
-      px(ex2+2+ox2, ey+1+oy2, 4, 4, C.eye);
-      px(ex1+3+ox2, ey+1+oy2, 1, 2, '#FFFFFF');
-      px(ex2+3+ox2, ey+1+oy2, 1, 2, '#FFFFFF');
-      // Lower lash line
-      px(ex1, ey+6, 8, 1, C.liner);
-      px(ex2, ey+6, 8, 1, C.liner);
+      p(ex1,ey,8,6,C.eyeWh); p(ex2,ey,8,6,C.eyeWh);
+      p(ex1+2+ox2,ey+1+oy2,4,4,C.eye); p(ex2+2+ox2,ey+1+oy2,4,4,C.eye);
+      p(ex1+3+ox2,ey+1+oy2,1,2,'#FFF'); p(ex2+3+ox2,ey+1+oy2,1,2,'#FFF');
+      p(ex1,ey+6,8,1,C.lash); p(ex2,ey+6,8,1,C.lash);
     } else {
-      px(ex1, ey+3, 8, 2, C.liner);
-      px(ex2, ey+3, 8, 2, C.liner);
+      p(ex1,ey+3,8,2,C.lash); p(ex2,ey+3,8,2,C.lash);
     }
 
     // ─── MOUTH ───
-    const mx2 = hx+14, my2 = hy+28;
-    if(mood === 'point' || mood === 'proud'){
-      px(mx2,   my2,   4, 2, C.liner);
-      px(mx2+4, my2+2, 8, 2, C.liner);
-      px(mx2+12,my2,   4, 2, C.liner);
-    } else if(mood === 'happy' || mood === 'wave'){
-      px(mx2,   my2,   3, 2, C.liner);
-      px(mx2+3, my2+2, 10, 3, C.liner);
-      px(mx2+13,my2,   3, 2, C.liner);
-      px(mx2+5, my2+3, 6, 2, '#FF9DE2');
-    } else if(mood === 'smile'){
-      px(mx2+2, my2+2, 12, 2, C.liner);
-      px(mx2,   my2,   2, 2, C.liner);
-      px(mx2+14,my2,   2, 2, C.liner);
+    const mxm=hx+13, mym=hy+30;
+    if(mood==='point'||mood==='proud'){
+      p(mxm,mym,4,2,C.lash); p(mxm+4,mym+2,8,2,C.lash); p(mxm+12,mym,4,2,C.lash);
+    } else if(mood==='happy'||mood==='wave'){
+      p(mxm,mym,3,2,C.lash); p(mxm+3,mym+2,10,3,C.lash); p(mxm+13,mym,3,2,C.lash);
+      p(mxm+5,mym+3,6,2,'#FF9DE2');
+    } else if(mood==='smile'){
+      p(mxm+2,mym+2,12,2,C.lash); p(mxm,mym,2,2,C.lash); p(mxm+14,mym,2,2,C.lash);
     } else {
-      px(mx2+3, my2+2, 10, 2, C.liner);
+      p(mxm+3,mym+2,10,2,C.lash);
     }
 
-    // ─── SPARKLES ───
-    if(mood === 'happy' || mood === 'point' || mood === 'proud'){
-      const t = frameCount * 0.05;
-      [[bxS-2, byS+18, 0],[bxS+72, byS+16, 1.4],[bxS+4, byS+55, 2.8]].forEach(([sx,sy,ph])=>{
-        const a = 0.4 + 0.6*Math.sin(t+ph);
+    // ─── SPARKLES (when active) ───
+    if(mood==='happy'||mood==='point'||mood==='wave'){
+      const t=frameCount*0.055;
+      [[cx-22,cy-110,0],[cx+22,cy-115,1.5],[cx-18,cy-75,3]].forEach(([sx,sy,ph])=>{
+        const a=0.35+0.65*Math.sin(t+ph);
         ctx.fillStyle=`rgba(124,243,255,${a.toFixed(2)})`;
         ctx.fillRect(sx,sy,3,3); ctx.fillRect(sx+1,sy-2,1,2); ctx.fillRect(sx-2,sy+1,2,1);
       });
     }
 
-    if(flip) ctx.restore();
     ctx.restore();
   }
 
   function animate(){
     frameCount++;
-    runTimer++;
-
-    // Body bob (slower when pointing/standing)
-    bodyBob += isRunning ? 0.18 : 0.04 * bodyBobDir;
-    if(bodyBob > 1) bodyBobDir = -1;
-    if(bodyBob < 0) bodyBobDir = 1;
     if(isRunning) runFrame++;
-    const bobY = isRunning ? Math.abs(Math.sin(runFrame*0.6)) * 8 : Math.sin(bodyBob * Math.PI) * 3;
-
-    armWave += 0.18;
+    armWaveT+=0.18;
+    bodyBobT+=0.04;
+    const bobY=isRunning?Math.abs(Math.sin(runFrame*0.5))*5:Math.sin(bodyBobT)*3;
 
     blinkTimer++;
-    if(blinkTimer > 200 && !isBlinking){ isBlinking=true; blinkTimer=0; }
-    if(isBlinking && blinkTimer > 10){ isBlinking=false; blinkTimer=0; }
+    if(blinkTimer>220&&!isBlinking){isBlinking=true;blinkTimer=0;}
+    if(isBlinking&&blinkTimer>10){isBlinking=false;blinkTimer=0;}
 
-    // Eye follow
-    const rect = canvas.getBoundingClientRect();
-    const charCX = rect.left + W/2;
-    const charCY = rect.top + 80;
-    const dx = mouseX - charCX, dy = mouseY - charCY;
-    const dist = Math.sqrt(dx*dx+dy*dy)||1;
-    const infl = Math.min(1, 260/(dist+1));
-    eyeOffX += ((dx/dist)*2*infl - eyeOffX)*0.1;
-    eyeOffY += ((dy/dist)*1.5*infl - eyeOffY)*0.1;
+    const rect=canvas.getBoundingClientRect();
+    const ccx=rect.left+CW/2, ccy=rect.top+CH*0.35;
+    const dx=mouseX-ccx, dy=mouseY-ccy, dist=Math.sqrt(dx*dx+dy*dy)||1;
+    const infl=Math.min(1,280/(dist+1));
+    eyeOffX+=(dx/dist*2*infl-eyeOffX)*0.1;
+    eyeOffY+=(dy/dist*1.5*infl-eyeOffY)*0.1;
 
-    const sec = getCurrentSection();
-    if(sec !== lastSection){ onSectionChange(sec); lastSection = sec; }
+    const sec=getCurrentSection();
+    if(sec!==lastSection){onSectionChange(sec);lastSection=sec;}
 
-    drawCharacter(10, 5+bobY, currentMood, Math.round(eyeOffX), Math.round(eyeOffY), isBlinking, armWave, runFrame, isFacingLeft, currentPointing);
+    drawChar(bobY,currentMood,Math.round(eyeOffX),Math.round(eyeOffY),isBlinking,isFacingLeft,currentPointing,runFrame,isRunning,armWaveT);
     requestAnimationFrame(animate);
   }
 
   function updateCharPos(){
-    const sy = window.scrollY;
-    wrapper.classList.toggle('hidden', sy < window.innerHeight * 0.75);
+    wrapper.classList.toggle('hidden',window.scrollY<window.innerHeight*0.75);
   }
-
-  addEventListener('scroll', updateCharPos, {passive:true});
+  addEventListener('scroll',updateCharPos,{passive:true});
   updateCharPos();
   animate();
 })();
+
 
 
 /* ══ SCROLL DRAMA ══ */
